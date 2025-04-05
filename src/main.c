@@ -18,6 +18,12 @@ static const s16 cos_fix[] = {
 // --- Game Variables ---
 Sprite* player_sprite;
 
+// Spacecraft properties
+#define SHIP_ROT_SPEED 3 // How fast the spaceship can rotate, must be >= 1.
+// Makes rotation of ship slower
+s16 iframe     = 0;
+s16 iframe_old = SHIP_ROT_SPEED;
+
 s16 ri     = 0;   // current rotation info for spaceship
 s16 ri_max = 23;  // max rotations 
 // Initial position and velocity of spacecraft
@@ -97,6 +103,9 @@ int main()
         handleInput();
         updatePhysics(); // Update velocities BEFORE drawing them
 
+        // --- Set Sprite Frame based on Rotation ---
+        SPR_setFrame(player_sprite, ri); // Use 'ri' to select the frame
+
         // --- Draw Debug Text ---
         // Clear previous text (optional, avoids ghosting if text length changes)
         VDP_clearText(1, 1, DEBUG_TEXT_LEN + 6); // Clear area for X velocity (X=1, Y=1, Length="VelX: "+value)
@@ -130,32 +139,36 @@ void handleInput()
     u16 value = JOY_readJoypad(JOY_1);
 
     // --- Rotation ---
-    if (value & BUTTON_LEFT) {
+    if (iframe >= iframe_old){
+        iframe = 0;
 
-        if (ri == ri_max){
-            ri = 0;
-        } else {
-            ri += 1;
+        if (value & BUTTON_LEFT) {
+
+            if (ri == ri_max){
+                ri = 0;
+            } else {
+                ri += 1;
+            }
+
+        } else if (value & BUTTON_RIGHT) {
+
+            if (ri == 0){
+                ri = ri_max;
+            } else {
+                ri -= 1;
+            }
         }
 
-    } else if (value & BUTTON_RIGHT) {
+        // --- Thrust ---
+        if (value & BUTTON_UP) {
 
-        if (ri == 0){
-            ri = ri_max;
-        } else {
-            ri -= 1;
+            vx = -sin_fix[ri];
+            vy = -cos_fix[ri];
+            tdelay = 0;
+            
         }
     }
-
-    // --- Thrust ---
-    if (value & BUTTON_UP) {
-
-        vx = -sin_fix[ri];
-        vy = -cos_fix[ri];
-        tdelay = 0;
-        
-    }
-
+    iframe += 1;
 }
 
 // --- Physics Update Function ---
