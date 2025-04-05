@@ -15,6 +15,9 @@ static const s16 cos_fix[] = {
 // Calculate the number of unique steps (excluding the wrap-around entry)
 #define SINCOS_TABLE_STEPS (sizeof(sin_fix) / sizeof(sin_fix[0]) - 1) // Should be 24
 
+// --- Sound effects ---
+#define SFX_LASER 64
+
 // --- Game Variables ---
 Sprite* player_sprite;
 
@@ -110,6 +113,9 @@ int main()
     JOY_init();
     // === Add this line to enable 6-button support detection ===
     JOY_setSupport(PORT_1, JOY_SUPPORT_6BTN);
+
+    //  --- Sound effects ---
+    XGM_setPCM(SFX_LASER, sfx_laser, sizeof(sfx_laser));
     
     VDP_setScreenWidth320();
     VDP_setTextPlane(BG_B); // Draw text on background plane B (usually above BG_A)
@@ -199,6 +205,7 @@ void fireBullet(){
             if (bullet_c >= NBULLET){
                 bullet_c = 0;
             }
+            XGM_startPlayPCM(SFX_LASER,1,SOUND_PCM_CH2);
         }
     }
 }
