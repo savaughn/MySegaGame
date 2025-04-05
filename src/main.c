@@ -18,37 +18,73 @@ static const s16 cos_fix[] = {
 // --- Game Variables ---
 Sprite* player_sprite;
 
-// Spacecraft properties
+// --- Spacecraft properties --- //
 #define SHIP_ROT_SPEED 3 // How fast the spaceship can rotate, must be >= 1.
 // Makes rotation of ship slower
-s16 iframe     = 0;
-s16 iframe_old = SHIP_ROT_SPEED;
-
-s16 ri     = 0;   // current rotation info for spaceship
-s16 ri_max = 23;  // max rotations 
+s16 iframe      = 0;                // Timer for rotationation of spacecraft when dpad is held
+s16 iframe_old  = SHIP_ROT_SPEED;  
+s16 ri          = 0;                // current rotation info for spaceship
+s16 ri_max      = 23;               // max rotations 
 // Initial position and velocity of spacecraft
-s16 x      = 144;  //Screen-coordinates of spacecraft
-s16 y      = 104;
-s16 vx     = 0;   //Requested velocity of spacecraft.
-s16 vy     = 0;
-s16 vxapp  = 0;   //Applied velocity of spacecraft.
-s16 vyapp  = 0;
+s16 x           = 144;              //Screen-coordinates of spacecraft
+s16 y           = 104;
+s16 vx          = 0;                //Requested velocity of spacecraft.
+s16 vy          = 0;
+s16 vxapp       = 0;                //Applied velocity of spacecraft.
+s16 vyapp       = 0;
 
-s16 xtry = 144; //For displaying Space ship
-s16 ytry = 104;
-s16 xrem = 0; //Tracking remainder for smooth motion of space ship
-s16 yrem = 0;
+s16 xtry        = 144;              //For displaying Space ship
+s16 ytry        = 104;
+s16 xrem        = 0;                //Tracking remainder for smooth motion of space ship
+s16 yrem        = 0;
 
-s16 tdelay = 0;     // Counter for thrust/momentum/friction 
-s16 tdelay_max = 8; // momentum
-s16 tcount = 0;
+s16 tdelay      = 0;                // Counter for thrust/momentum/friction 
+s16 tdelay_max  = 8;                // momentum
+s16 tcount      = 0;
 
-s16 thrust_x = 0;       // Initialize amount of thrust applied (acts like momentum)
-s16 thrust_y = 0;
+s16 thrust_x    = 0;                // Initialize amount of thrust applied (acts like momentum)
+s16 thrust_y    = 0;
 
-s16 thx = 0; //Checking thrust for max allowed values.
-s16 thy = 0;
+s16 thx         = 0;                //Checking thrust for max allowed values.
+s16 thy         = 0;
+// -----------------------------------
 
+
+// --- Properties for bullets --- //
+#define NBULLET 8  // maximum good-guy bullets
+#define NBULLET_TIMER_MAX 8 // Sets interval for new bullets when fire button is held
+
+// --- Bullet Structure ---
+typedef struct {
+    s16 status;         // 0 = inactive, 1 = active
+    s16 x;              // X-position
+    s16 y;              // Y-position
+    s16 bvxrem;         // Tracking remainders for smooth motion 
+    s16 bvyrem;         // 
+    s16 new   ;         // If this is a new build 0 = no, 1 = yes
+    Sprite* sprite_ptr; // Pointer to the hardware sprite object
+} Bullet;
+
+// Bullet Pool
+Bullet bullets[NBULLET];
+s16 fire_cooldown           = 0;    // Timer for limiting fire rate
+s16 bullet_c                = 0;    //Counter for bullets
+s16 bullet_timer            = 0;    //delay timer for new bullets
+
+// static const s16 bullet_v   = 4;    //Bullet Speed (not implemented -- fixed at the moment)
+s16 bvx                     = 0;    //Requested velocity
+s16 bvy                     = 0;
+s16 bvxapp                  = 0;    //Applied velocity (round-off)
+s16 bvyapp                  = 0;
+
+// s16 bvxrem[NBULLET]         = {0};  //Track remaider for smooth motion
+// s16 bvyrem[NBULLET]         = {0};
+// s16 bullet_x[NBULLET]       = {0};  //X-position
+// s16 bullet_y[NBULLET]       = {0};  //Y-position
+// s16 bullet_status[NBULLET]  = {0};  //Status of bullets
+// s16 bullet_c                = 0;    //Counter for bullets
+// s16 bullet_timer            = 0;    //delay timer for new bullets
+// // -----------------------------------
 
 // --- ADD BUFFERS FOR DEBUG TEXT ---
 #define DEBUG_TEXT_LEN 16 // Max length for the velocity strings
@@ -58,7 +94,10 @@ char text_vel_y[DEBUG_TEXT_LEN];
 
 // Function prototypes
 void handleInput();
-void updatePhysics(); // Keep the zero-crossing version for now
+void updatePhysics(); // Motion of spaceship
+void updateBullets(); // Update bullets
+void fireBullet();    // New function
+void initBullets();   // Initialize bullet class
 
 // --- Main Function ---
 int main()
@@ -78,6 +117,8 @@ int main()
 
     PAL_setPalette(PAL1, player_palette.data, DMA_QUEUE);
 
+    // Initialize bullet structures
+    initBullets();
 
     // Create sprite
     player_sprite = SPR_addSprite(
@@ -100,10 +141,9 @@ int main()
     while (1)
     {
 
-        vx = 0;
-        vy = 0;
         handleInput();
         updatePhysics(); // Update velocities BEFORE drawing them
+        updateBullets();  // Update bullets fired by player
 
         // --- Set Sprite Frame based on Rotation ---
         SPR_setFrame(player_sprite, ri); // Use 'ri' to select the frame
@@ -135,6 +175,75 @@ int main()
     return (0);
 }
 
+// --- Initialize Bullet Pool ---
+void initBullets() {
+    // Set all bullets to inactive initially
+    // memset(bullets, 0, sizeof(bullets));
+    // // Alternative loop:
+    for (s16 i = 0; i < NBULLET; i++) {
+        bullets[i].status       = -1;
+        bullets[i].new         = 0;
+        bullets[i].sprite_ptr   = NULL;
+    }
+}
+
+void fireBullet(){
+    if (bullet_timer > NBULLET_TIMER_MAX){
+        bullet_timer = 0;
+        if (bullets[bullet_c].status < 0){
+            bullets[bullet_c].status = ri;
+            bullets[bullet_c].new          = 1;
+            bullets[bullet_c].x      = x+4;
+            bullets[bullet_c].y      = y+4;
+            bullet_c += 1;
+            if (bullet_c >= NBULLET){
+                bullet_c = 0;
+            }
+        }
+    }
+}
+
+// --- Update bullets fired by player --- ///
+void updateBullets()
+{
+    const s16 screen_w = VDP_getScreenWidth();
+    const s16 screen_h = VDP_getScreenHeight();
+    
+    for (s16 ii = 0; ii < NBULLET; ii++) {
+            if ((bullets[ii].status >= 0) & (bullets[ii].new > 0)){
+                // set(bullet_x[ii], bullet_y[ii], 0x00); <- this was for plotting (turn off pixel from old-position)
+                bullets[ii].sprite_ptr = SPR_addSprite(&bullet_sprite_res,
+                                                bullets[ii].x,
+                                                bullets[ii].y,
+                                                TILE_ATTR(PAL1, TRUE, FALSE, FALSE));
+                bullets[ii].new = 0;
+                // //Check for collision
+                // bullet_fighter(ii);
+            }
+
+            if (bullets[ii].status >= 0){
+                bvx = -sin_fix[bullets[ii].status];
+                bvy = -cos_fix[bullets[ii].status];
+                bvxapp = ( (bvx + bullets[ii].bvxrem) >> 6);
+                bvyapp = ( (bvy + bullets[ii].bvyrem) >> 6);
+                bullets[ii].bvxrem  = bvx + bullets[ii].bvxrem - bvxapp * 64; 
+                bullets[ii].bvyrem  = bvy + bullets[ii].bvyrem - bvyapp * 64;
+                bullets[ii].x += bvxapp;
+                bullets[ii].y += bvyapp;
+
+                if (bullets[ii].x > 0 && bullets[ii].x < screen_w && bullets[ii].y > 0 && bullets[ii].y < screen_h){
+                    // set(bullet_x[ii], bullet_y[ii], 0xFF); <- this was for plotting (turn on)
+                    SPR_setPosition(bullets[ii].sprite_ptr, bullets[ii].x, bullets[ii].y);
+                } else {
+                    bullets[ii].status = -1;
+                    // Release the associated hardware sprite
+                    SPR_releaseSprite(bullets[ii].sprite_ptr);
+                    bullets[ii].sprite_ptr = NULL; // Good practice
+                }
+            }
+        }
+}
+
 // --- Input Handling Function ---
 void handleInput()
 {
@@ -160,17 +269,26 @@ void handleInput()
                 ri -= 1;
             }
         }
-
-        // --- Thrust ---
-        if (value & BUTTON_UP) {
-
-            vx = -sin_fix[ri];
-            vy = -cos_fix[ri];
-            tdelay = 0;
-            
-        }
     }
     iframe += 1;
+
+    // --- Thrust ---
+    vx = 0; // Default is no thrust applied.
+    vy = 0; 
+    if (value & BUTTON_UP) {
+
+        vx = -sin_fix[ri];
+        vy = -cos_fix[ri];
+        tdelay = 0;
+        
+    }
+
+    // Fire main weapon
+    if (value & BUTTON_B) {
+        fireBullet();
+    }
+
+    bullet_timer += 1;
 }
 
 // --- Physics Update Function ---
