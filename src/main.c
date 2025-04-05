@@ -2,6 +2,31 @@
 #include <maths.h>
 #include "res/resources.h"
 
+
+// --- Background & Scrolling Constants ---
+// Map dimensions in Hardware Tiles (Use VDP Plane size directly for simplicity)
+#define MAP_HW_WIDTH            64
+#define MAP_HW_HEIGHT           32 // Use 64x32 plane size (common, saves VRAM/RAM)
+// Tile indexing - Need base indices for both layers
+#define BG_FAR_TILE_INDEX       TILE_USER_INDEX                 // Start far tiles after font
+#define BG_NEAR_TILE_INDEX      (BG_FAR_TILE_INDEX + bg_far_tiles.numTile) // Start near tiles after far tiles
+// Scrolling Parameters
+#define BBX                     100 // Scroll when player X is < this or > screen_w - this
+#define BBY                     80  // Scroll when player Y is < this or > screen_h - this
+// Parallax Factors (Higher value = slower scroll) - Use powers of 2 for shift efficiency
+#define PARALLAX_FACTOR_BG_B    4  // Far layer scrolls at 1/4 player speed delta
+#define PARALLAX_FACTOR_BG_A    2  // Near layer scrolls at 1/2 player speed delta
+
+// For storing size of screen
+s16 SWIDTH;
+s16 SHEIGHT;
+
+// Boundary for scrolling -- how far we can move the spaceshift until the background scrolls 
+s16 BX1; s16 BX2; s16 BY1; s16 BY2;
+
+// How much the map is scrolled
+s16 scroll_x = 0; s16 scroll_y = 0;
+
 // --- Pre-calculated Sine/Cosine Tables ---
 // Scaled by 255, 24 steps (+1 for wraparound)
 static const s16 sin_fix[] = {
@@ -20,6 +45,15 @@ static const s16 cos_fix[] = {
 
 // --- Game Variables ---
 Sprite* player_sprite;
+// Background Scroll Offsets (in pixels)
+s16 scroll_a_x = 0; s16 scroll_a_y = 0; // Plane A (Near) scroll
+s16 scroll_b_x = 0; s16 scroll_b_y = 0; // Plane B (Far) scroll
+// Screen Dimensions
+s16 screen_width_pixels; s16 screen_height_pixels;
+
+// --- Background Map Data Arrays (Size based on Plane size: 64x32 = 4KB RAM total) ---
+static u16 farMapData[MAP_HW_WIDTH * MAP_HW_HEIGHT];   // Plane B
+static u16 nearMapData[MAP_HW_WIDTH * MAP_HW_HEIGHT];  // Plane A
 
 // --- Spacecraft properties --- //
 #define SHIP_ROT_SPEED 3 // How fast the spaceship can rotate, must be >= 1.
@@ -50,6 +84,9 @@ s16 thrust_y    = 0;
 
 s16 thx         = 0;                //Checking thrust for max allowed values.
 s16 thy         = 0;
+
+s16 dx          = 0;
+s16 dy          = 0;
 // -----------------------------------
 
 
@@ -80,14 +117,6 @@ s16 bvy                     = 0;
 s16 bvxapp                  = 0;    //Applied velocity (round-off)
 s16 bvyapp                  = 0;
 
-// s16 bvxrem[NBULLET]         = {0};  //Track remaider for smooth motion
-// s16 bvyrem[NBULLET]         = {0};
-// s16 bullet_x[NBULLET]       = {0};  //X-position
-// s16 bullet_y[NBULLET]       = {0};  //Y-position
-// s16 bullet_status[NBULLET]  = {0};  //Status of bullets
-// s16 bullet_c                = 0;    //Counter for bullets
-// s16 bullet_timer            = 0;    //delay timer for new bullets
-// // -----------------------------------
 
 // --- ADD BUFFERS FOR DEBUG TEXT ---
 #define DEBUG_TEXT_LEN 16 // Max length for the velocity strings
@@ -97,10 +126,12 @@ char text_vel_y[DEBUG_TEXT_LEN];
 
 // Function prototypes
 void handleInput();
-void updatePhysics(); // Motion of spaceship
-void updateBullets(); // Update bullets
-void fireBullet();    // New function
-void initBullets();   // Initialize bullet class
+void updatePhysics();       // Motion of spaceship
+void updateBullets();       // Update bullets
+void fireBullet();          // New function
+void initBullets();         // Initialize bullet class
+void generateRandomMapLayer(u16* mapData, u16 mapWidth, u16 mapHeight, u16 baseTileIndex, u16 numTilesInSet, u16 pal); // Modified generator
+void updateScrolling(); // <-- New function
 
 // --- Main Function ---
 int main()
@@ -118,10 +149,50 @@ int main()
     XGM_setPCM(SFX_LASER, sfx_laser, sizeof(sfx_laser));
     
     VDP_setScreenWidth320();
-    VDP_setTextPlane(BG_B); // Draw text on background plane B (usually above BG_A)
-    VDP_setTextPalette(0);  // Use palette 0 for text (standard white/black)
 
-    PAL_setPalette(PAL1, player_palette.data, DMA_QUEUE);
+    // Get screen dimensions
+    SWIDTH = VDP_getScreenWidth(); // Store for frequent use
+    SHEIGHT = VDP_getScreenHeight();
+
+    BX1 = BBX;
+    BX2 = SWIDTH - BBX;
+    BY1 = BBY;
+    BY2 = SHEIGHT - BBY;
+
+    // --- Setup Background Planes ---
+    VDP_setPlaneSize(BG_A, MAP_HW_WIDTH, MAP_HW_HEIGHT); // Near Stars (64x32 tiles)
+    VDP_setPlaneSize(BG_B, MAP_HW_WIDTH, MAP_HW_HEIGHT); // Far Stars (64x32 tiles)
+    VDP_clearPlane(BG_A, TRUE);
+    VDP_clearPlane(BG_B, TRUE);
+    // Set Priorities: Plane A (Near) is HIGHER (0) than Plane B (Far) (1)
+    // VDP_setPlanePriority(BG_A, TRUE);  // High priority for Plane A
+    // VDP_setPlanePriority(BG_B, FALSE); // Low priority for Plane B
+    // Enable per-plane scrolling
+    VDP_setScrollingMode(HSCROLL_PLANE, VSCROLL_PLANE);
+    // -----------------------------
+
+    VDP_setTextPlane(BG_B); VDP_setTextPalette(3); // Text on top of BG_B temporarily
+
+    // --- Load Palettes ---
+    PAL_setPalette(PAL0, bg_far_palette.data, DMA_QUEUE);  // Far stars palette to PAL0
+    PAL_setPalette(PAL1, player_palette.data, DMA_QUEUE); // Player/Bullet palette to PAL1
+    PAL_setPalette(PAL2, bg_near_palette.data, DMA_QUEUE); // Near stars palette to PAL2
+    // ---------------------
+
+    // --- Load Background Tiles ---
+    // Load far tiles first, starting at BG_FAR_TILE_INDEX
+    VDP_loadTileData(bg_far_tiles.tiles, BG_FAR_TILE_INDEX, bg_far_tiles.numTile, DMA);
+    // Load near tiles immediately after far tiles
+    VDP_loadTileData(bg_near_tiles.tiles, BG_NEAR_TILE_INDEX, bg_near_tiles.numTile, DMA);
+    // ---------------------------
+
+    // --- Generate and Upload Maps ---
+    generateRandomMapLayer(farMapData, MAP_HW_WIDTH, MAP_HW_HEIGHT, BG_FAR_TILE_INDEX, bg_far_tiles.numTile, PAL0);
+    generateRandomMapLayer(nearMapData, MAP_HW_WIDTH, MAP_HW_HEIGHT, BG_NEAR_TILE_INDEX, bg_near_tiles.numTile, PAL2);
+    // Upload maps to respective VDP planes
+    VDP_setTileMapDataRect(BG_B, farMapData,  0, 0, MAP_HW_WIDTH, MAP_HW_HEIGHT, MAP_HW_WIDTH, DMA); // Far stars to B
+    VDP_setTileMapDataRect(BG_A, nearMapData, 0, 0, MAP_HW_WIDTH, MAP_HW_HEIGHT, MAP_HW_WIDTH, DMA); // Near stars to A
+    // ------------------------------
 
     // Initialize bullet structures
     initBullets();
@@ -133,19 +204,20 @@ int main()
                         y,
                         TILE_ATTR(PAL1, TRUE, FALSE, FALSE));
 
-    // DEBUG Check
-    if (player_sprite == NULL) {
-         PAL_setColor(18, 0x00E0);
-         VDP_setBackgroundColor(18);
-         while(1) { SYS_doVBlankProcess(); }
-    }
+    XGM_setLoopNumber(-1);
+    XGM_startPlay(track1);
 
     VDP_setBackgroundColor(0);
     SYS_enableInts();
 
+
     // Main Game Loop
     while (1)
     {
+
+        // Calculate player's current SCREEN position (needed for scrolling logic)
+        // s16 player_screen_x = x;
+        // s16 player_screen_y = y;
 
         handleInput();
         updatePhysics(); // Update velocities BEFORE drawing them
@@ -160,8 +232,8 @@ int main()
         VDP_clearText(1, 2, DEBUG_TEXT_LEN + 6); // Clear area for Y velocity (X=1, Y=2, Length="VelY: "+value)
 
         // Convert fix16 velocities to strings (e.g., 3 decimal places)
-        intToStr(x, text_vel_x, 0);
-        intToStr(y, text_vel_y, 0);
+        intToStr(scroll_a_x, text_vel_x, 0);
+        intToStr(scroll_a_y, text_vel_y, 0);
 
         // Draw labels and values
         VDP_drawText("PosX:", 1, 1);
@@ -174,11 +246,51 @@ int main()
         SPR_setPosition(player_sprite,
                         x,
                         y);
+        updateScrolling();
 
         SPR_update();
         SYS_doVBlankProcess(); // VDP text updates happen during VBlank
     }
     return (0);
+}
+
+// --- Update Scrolling Function ---
+void updateScrolling() {
+    // Calculate parallax scroll for each plane
+    // Use >> for division by power of 2 parallax factor
+
+    // scroll_a_x -= (dx >> 2);  
+    // scroll_a_y += (dy >> 2); 
+    // scroll_b_x -= (dx >> 2);
+    // scroll_b_y += (dy >> 2);
+
+    scroll_a_x -= dx;  
+    scroll_a_y += dy; 
+    // scroll_b_x -= dx;
+    // scroll_b_y += dy;  <- make this move slowly
+
+    // Apply scroll values to VDP registers
+    VDP_setHorizontalScroll(BG_A, scroll_a_x);
+    VDP_setVerticalScroll(BG_A, scroll_a_y);
+    VDP_setHorizontalScroll(BG_B, scroll_b_x);
+    VDP_setVerticalScroll(BG_B, scroll_b_y);
+}
+
+// --- Generate Random Background Map Layer ---
+void generateRandomMapLayer(u16* mapData, u16 mapWidth, u16 mapHeight, u16 baseTileIndex, u16 numTilesInSet, u16 pal) {
+    u32 mapIdx = 0; // Use u32 for larger map index if needed (though 64x32 fits u16)
+    for (u16 ty = 0; ty < mapHeight; ty++) {
+        for (u16 tx = 0; tx < mapWidth; tx++) {
+            // Choose a random tile index from the provided set (0 to numTilesInSet - 1)
+            u16 randomTileOffset = random() % numTilesInSet;
+            // Add base VRAM index
+            u16 tileVRAMIndex = baseTileIndex + randomTileOffset;
+
+            // Set tile attributes (Use provided palette, low prio, no flip)
+            mapData[mapIdx] = TILE_ATTR_FULL(pal, FALSE, FALSE, FALSE, tileVRAMIndex);
+            mapIdx++;
+        }
+    }
 }
 
 // --- Initialize Bullet Pool ---
@@ -338,24 +450,20 @@ void updatePhysics()
     tcount += 1;
 
 
-    // --- Update Position ---
-    x = xtry;
-    y = ytry;
-
-
-    // --- Screen Wrapping ---
-    const s16 screen_w = VDP_getScreenWidth();
-    const s16 screen_h = VDP_getScreenHeight();
-
-    if (x < 0) {
-        x = x + screen_w;
-    } else if (x >= screen_w) {
-        x = x - screen_w;
+    // Keep spacecraft in bounds
+    if (xtry > BX1 && xtry < BX2){
+        x = xtry;
+        dx = 0;
+    } else {
+        dx = (xtry - x);
+    }
+        
+    if (ytry > BY1 && ytry < BY2){
+        y = ytry;
+        dy = 0;
+    } else {
+        dy = (ytry - y);
     }
 
-    if (y < 0) {
-        y = y + screen_h;
-    } else if (y >= screen_h) {
-        y = y - screen_h;
-    }
+    
 }
