@@ -65,11 +65,13 @@ int main()
 {
     SYS_disableInts();
 
+    // VDP text system is implicitly initialized by VDP_init
     VDP_init();
     SPR_init();
     JOY_init();
-    // VDP text system is implicitly initialized by VDP_init
-
+    // === Add this line to enable 6-button support detection ===
+    JOY_setSupport(PORT_1, JOY_SUPPORT_6BTN);
+    
     VDP_setScreenWidth320();
     VDP_setTextPlane(BG_B); // Draw text on background plane B (usually above BG_A)
     VDP_setTextPalette(0);  // Use palette 0 for text (standard white/black)
