@@ -134,7 +134,7 @@ void generateRandomMapLayer(u16* mapData, u16 mapWidth, u16 mapHeight, u16 baseT
 void updateScrolling(); // <-- New function
 
 const u16 debug_font_palette[16] = {
-    0x0000, // Index 0: Black (or could be 0x0EEE for white if you want white on black)
+    0x0EEE, // Index 0: Black (or could be 0x0EEE for white if you want white on black)
     0x0EEE, // Index 1: White (for the font character)
     // ... rest can be black or anything
     0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE,
