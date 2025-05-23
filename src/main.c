@@ -412,23 +412,6 @@ void initFighters(){
     }
 }
 
-void fireBullet(){
-    if (bullet_timer > NBULLET_TIMER_MAX){
-        bullet_timer = 0;
-        if (bullets[bullet_c].status < 0){
-            bullets[bullet_c].status = ri;
-            bullets[bullet_c].new    = 1;
-            bullets[bullet_c].x      = x+4;
-            bullets[bullet_c].y      = y+4;
-            bullet_c += 1;
-            if (bullet_c >= NBULLET){
-                bullet_c = 0;
-            }
-            XGM_startPlayPCM(SFX_LASER,1,SOUND_PCM_CH2);
-        }
-    }
-}
-
 void updateFighters()
 {
 
@@ -512,6 +495,24 @@ void updateFighters()
     }
 }
 
+void fireBullet(){
+    if (bullet_timer > NBULLET_TIMER_MAX){
+        bullet_timer = 0;
+        if (bullets[bullet_c].status < 0){
+            bullets[bullet_c].status = ri;
+            bullets[bullet_c].new    = 1;
+            bullets[bullet_c].x      = x+4;
+            bullets[bullet_c].y      = y+4;
+            bullet_c += 1;
+            if (bullet_c >= NBULLET){
+                bullet_c = 0;
+            }
+            XGM_startPlayPCM(SFX_LASER,1,SOUND_PCM_CH2);
+        }
+    }
+}
+
+
 // --- Update bullets fired by player --- ///
 void updateBullets()
 {
@@ -519,38 +520,64 @@ void updateBullets()
     // const s16 screen_h = VDP_getScreenHeight();
     
     for (s16 ii = 0; ii < NBULLET; ii++) {
-            if ((bullets[ii].status >= 0) & (bullets[ii].new > 0)){
-                // set(bullet_x[ii], bullet_y[ii], 0x00); <- this was for plotting (turn off pixel from old-position)
-                bullets[ii].sprite_ptr = SPR_addSprite(&bullet_sprite_res,
-                                                bullets[ii].x,
-                                                bullets[ii].y,
-                                                TILE_ATTR(PAL1, TRUE, FALSE, FALSE));
-                bullets[ii].new = 0;
-                // //Check for collision
-                // bullet_fighter(ii);
-            }
+        if ((bullets[ii].status >= 0) & (bullets[ii].new > 0)){
+            // set(bullet_x[ii], bullet_y[ii], 0x00); <- this was for plotting (turn off pixel from old-position)
+            bullets[ii].sprite_ptr = SPR_addSprite(&bullet_sprite_res,
+                                            bullets[ii].x,
+                                            bullets[ii].y,
+                                            TILE_ATTR(PAL1, TRUE, FALSE, FALSE));
+            bullets[ii].new = 0;
+        }
 
-            if (bullets[ii].status >= 0){
-                bvx = -sin_fix[bullets[ii].status];
-                bvy = -cos_fix[bullets[ii].status];
-                bvxapp = ( (bvx + bullets[ii].bvxrem) >> 6);
-                bvyapp = ( (bvy + bullets[ii].bvyrem) >> 6);
-                bullets[ii].bvxrem  = bvx + bullets[ii].bvxrem - bvxapp * 64; 
-                bullets[ii].bvyrem  = bvy + bullets[ii].bvyrem - bvyapp * 64;
-                bullets[ii].x += bvxapp;
-                bullets[ii].y += bvyapp;
+        
+        if (bullets[ii].status >= 0){
+            for (s16 i = 0; i < nfighter; i++) {
+                
+                if (fighters[i].x     < bullets[ii].x + 2 &&
+                    fighters[i].x + 6 > bullets[ii].x     &&
+                    fighters[i].y     < bullets[ii].y + 2 &&
+                    fighters[i].y + 6 > bullets[ii].y)
+                {
+                    // bullets[ii].status = -1;
+                    // SPR_releaseSprite(bullets[ii].sprite_ptr);
+                    // bullets[ii].sprite_ptr = NULL; // Good practice
+                    bullets[ii].x = -10;
+                    bullets[ii].y = -10;
 
-                if (bullets[ii].x > 0 && bullets[ii].x < screen_w && bullets[ii].y > 0 && bullets[ii].y < screen_h){
-                    // set(bullet_x[ii], bullet_y[ii], 0xFF); <- this was for plotting (turn on)
-                    SPR_setPosition(bullets[ii].sprite_ptr, bullets[ii].x, bullets[ii].y);
-                } else {
-                    bullets[ii].status = -1;
-                    // Release the associated hardware sprite
-                    SPR_releaseSprite(bullets[ii].sprite_ptr);
-                    bullets[ii].sprite_ptr = NULL; // Good practice
+                    fighters[i].status = -1;
+                    fighters[i].x = -10; //Move sprite off-screen
+                    fighters[i].y = -10;
+                    SPR_setPosition(fighters[i].sprite_ptr, fighters[i].x, fighters[i].y);
+                    // SPR_releaseSprite(fighters[i].sprite_ptr);
+                    // fighters[i].sprite_ptr = NULL; // Good practice
                 }
+
             }
         }
+
+
+
+        if (bullets[ii].status >= 0){
+            bvx = -sin_fix[bullets[ii].status];
+            bvy = -cos_fix[bullets[ii].status];
+            bvxapp = ( (bvx + bullets[ii].bvxrem) >> 6);
+            bvyapp = ( (bvy + bullets[ii].bvyrem) >> 6);
+            bullets[ii].bvxrem  = bvx + bullets[ii].bvxrem - bvxapp * 64; 
+            bullets[ii].bvyrem  = bvy + bullets[ii].bvyrem - bvyapp * 64;
+            bullets[ii].x += bvxapp;
+            bullets[ii].y += bvyapp;
+
+            if (bullets[ii].x > 0 && bullets[ii].x < screen_w && bullets[ii].y > 0 && bullets[ii].y < screen_h){
+                // set(bullet_x[ii], bullet_y[ii], 0xFF); <- this was for plotting (turn on)
+                SPR_setPosition(bullets[ii].sprite_ptr, bullets[ii].x, bullets[ii].y);
+            } else {
+                bullets[ii].status = -1;
+                // Release the associated hardware sprite
+                SPR_releaseSprite(bullets[ii].sprite_ptr);
+                bullets[ii].sprite_ptr = NULL; // Good practice
+            }
+        }
+    }
 }
 
 // --- Input Handling Function ---
