@@ -533,23 +533,26 @@ void updateBullets()
         if (bullets[ii].status >= 0){
             for (s16 i = 0; i < nfighter; i++) {
                 
-                if (fighters[i].x     < bullets[ii].x + 2 &&
-                    fighters[i].x + 6 > bullets[ii].x     &&
-                    fighters[i].y     < bullets[ii].y + 2 &&
-                    fighters[i].y + 6 > bullets[ii].y)
-                {
-                    // bullets[ii].status = -1;
-                    // SPR_releaseSprite(bullets[ii].sprite_ptr);
-                    // bullets[ii].sprite_ptr = NULL; // Good practice
-                    bullets[ii].x = -10;
-                    bullets[ii].y = -10;
+                if (fighters[i].status >= 0){
+                    if (fighters[i].x     < bullets[ii].x + 2 &&
+                        fighters[i].x + 6 > bullets[ii].x     &&
+                        fighters[i].y     < bullets[ii].y + 2 &&
+                        fighters[i].y + 6 > bullets[ii].y)
+                    {
+                        // bullets[ii].status = -1;
+                        // SPR_releaseSprite(bullets[ii].sprite_ptr);
+                        // bullets[ii].sprite_ptr = NULL; // Good practice
+                        bullets[ii].x = -10;
+                        bullets[ii].y = -10;
 
-                    fighters[i].status = -1;
-                    fighters[i].x = -10; //Move sprite off-screen
-                    fighters[i].y = -10;
-                    SPR_setPosition(fighters[i].sprite_ptr, fighters[i].x, fighters[i].y);
-                    // SPR_releaseSprite(fighters[i].sprite_ptr);
-                    // fighters[i].sprite_ptr = NULL; // Good practice
+                        fighters[i].status = -1;
+                        // fighters[i].x = -10; //Move sprite off-screen 
+                        // fighters[i].y = -10;
+                        // SPR_setPosition(fighters[i].sprite_ptr, fighters[i].x, fighters[i].y);
+                        SPR_releaseSprite(fighters[i].sprite_ptr);
+                        fighters[i].sprite_ptr = NULL; // Good practice
+                    }
+
                 }
 
             }
