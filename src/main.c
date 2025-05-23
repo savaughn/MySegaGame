@@ -17,9 +17,17 @@
 #define PARALLAX_FACTOR_BG_B    4  // Far layer scrolls at 1/4 player speed delta
 #define PARALLAX_FACTOR_BG_A    2  // Near layer scrolls at 1/2 player speed delta
 
+#define MAPSIZE 2048     // Size of world (world coordinates)
+#define MMAPSIZE -2048
+#define MAPSIZED2 1024 
+#define MMAPSIZED2 -1024 
+#define MAPSIZEM1 1023 
+
 // For storing size of screen
-s16 SWIDTH;
+s16 SWIDTH;   // These should be consolidated 
 s16 SHEIGHT;
+s16 screen_w;
+s16 screen_h;
 
 // Boundary for scrolling -- how far we can move the spaceshift until the background scrolls 
 s16 BX1; s16 BX2; s16 BY1; s16 BY2;
@@ -118,6 +126,37 @@ s16 bvxapp                  = 0;    //Applied velocity (round-off)
 s16 bvyapp                  = 0;
 
 
+// --- Properties for Small Enemy Fighters --- //
+#define NFIGHTER_MAX 30  //Number of fighters
+#define FIGHTER_RATE 128 //Rate at which Fighters regenerate.
+
+// --- Fighter Structure ---
+typedef struct {
+    s16 status;  // Status of fighter (dead/alive)
+    s16 x;       // X-position
+    s16 y;       // Y-position
+    s16 lx1old; 
+    s16 lx2old; 
+    s16 ly1old; 
+    s16 ly2old; 
+    s16 dx; 
+    s16 dy; 
+    s16 vx; 
+    s16 vy; 
+    s16 vxi; 
+    s16 vyi; 
+    s16 xrem; 
+    s16 yrem;
+    s16 new;
+    s16 nframe;
+    Sprite* sprite_ptr; // Pointer to the hardware sprite object
+} Fighter;
+
+// Fighter Pool
+Fighter fighters[NFIGHTER_MAX];
+s16 nfighter = NFIGHTER_MAX; //number of fighters
+
+
 // --- ADD BUFFERS FOR DEBUG TEXT ---
 #define DEBUG_TEXT_LEN 16 // Max length for the velocity strings
 char text_vel_x[DEBUG_TEXT_LEN];
@@ -131,7 +170,9 @@ void updateBullets();       // Update bullets
 void fireBullet();          // New function
 void initBullets();         // Initialize bullet class
 void generateRandomMapLayer(u16* mapData, u16 mapWidth, u16 mapHeight, u16 baseTileIndex, u16 numTilesInSet, u16 pal); // Modified generator
-void updateScrolling(); // <-- New function
+void updateScrolling();     // Parallax scrolling
+void initFighters();        // Initialize fighter class
+void updateFighters();      // Update fighters
 
 const u16 debug_font_palette[16] = {
     0x0000, // Index 0: Black (or could be 0x0EEE for white if you want white on black)
@@ -141,6 +182,7 @@ const u16 debug_font_palette[16] = {
     0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE
 };
 
+s16 nframe = 0;
 
 // --- Main Function ---
 int main()
@@ -161,19 +203,19 @@ int main()
 
     VDP_setPlaneSize(MAP_HW_WIDTH, MAP_HW_HEIGHT, FALSE);
 
-
     // VDP_setTextPlane(BG_B); VDP_setTextPalette(3); // Text on top of BG_B temporarily
     VDP_setTextPlane(WINDOW);  // or VDP_PLAN_WINDOW in older SGDK
-    VDP_setTextPalette(PAL3);
+    VDP_setTextPalette(PAL3);    
+
+    // VDP_drawTextBG(WINDOW, "text on WINDOW", 10, 15);
 
     // === NEW: POSITION THE WINDOW PLANE ===
     // This makes the window cover the top-left of the screen.
     // Text coordinates (0,0) will be at the screen's top-left.
     VDP_setWindowHPos(FALSE, 0); // Window plane horizontal position (from left edge, 0 tiles offset)
-    VDP_setWindowVPos(FALSE, 0); // Window plane vertical position (from top edge, 0 tiles offset)
+    VDP_setWindowVPos(FALSE, 3); // Window plane vertical position (from top edge, 0 tiles offset)
                                  // The window typically covers 32 tiles horizontally.
-
-    // VDP_drawText("TESTING", 5, 5); // Draw some test text immediately
+    // VDP_clearPlane(WINDOW, TRUE);
 
     // Get screen dimensions
     SWIDTH = VDP_getScreenWidth(); // Store for frequent use
@@ -218,12 +260,19 @@ int main()
     // Initialize bullet structures
     initBullets();
 
+    // Initialize fighter structures
+    initFighters();
+
     // Create sprite
     player_sprite = SPR_addSprite(
                         &player_sprite_res,
                         x,
                         y,
                         TILE_ATTR(PAL1, TRUE, FALSE, FALSE));
+
+
+    screen_w = VDP_getScreenWidth();
+    screen_h = VDP_getScreenHeight();
 
     XGM_setLoopNumber(-1);
     XGM_startPlay(track1);
@@ -241,8 +290,9 @@ int main()
         // s16 player_screen_y = y;
 
         handleInput();
-        updatePhysics(); // Update velocities BEFORE drawing them
+        updatePhysics();  // Update velocities BEFORE drawing them
         updateBullets();  // Update bullets fired by player
+        updateFighters(); // Update fighters attacking the player
 
         updateScrolling();
 
@@ -258,6 +308,9 @@ int main()
         intToStr(scroll_a_x, text_vel_x, 0);
         intToStr(scroll_a_y, text_vel_y, 0);
 
+
+        // VDP_setWindowOnTop(28);
+        // VDP_setTextPlane(WINDOW);
         // Draw labels and values
         VDP_drawText("PosX:", 1, 1);
         VDP_drawText(text_vel_x, 7, 1); // Draw value starting at column 7
@@ -265,16 +318,25 @@ int main()
         VDP_drawText(text_vel_y, 7, 2); // Draw value starting at column 7
         // -----------------------
 
+        // VDP_setWindowOff();
+        // VDP_setTextPlane(BG_A);
+
         // Update Graphics
         SPR_setPosition(player_sprite,
                         x,
                         y);
+
+        nframe += 1;
+        if (nframe > 60){
+            nframe = 0;
+        }
 
         SPR_update();
         SYS_doVBlankProcess(); // VDP text updates happen during VBlank
     }
     return (0);
 }
+
 
 // --- Update Scrolling Function ---
 void updateScrolling() {
@@ -327,12 +389,35 @@ void initBullets() {
     }
 }
 
+void initFighters(){
+
+    for (s16 i = 0; i < nfighter; i++) {
+
+        fighters[i].x = (random() % MAPSIZEM1) + 1; 
+        fighters[i].y = (random() % MAPSIZEM1) + 1;
+        fighters[i].vxi = (random() % 256) + 16;
+        fighters[i].vyi = (random() % 256) + 16;
+        fighters[i].x = fighters[i].vxi;
+        fighters[i].y = fighters[i].vyi;
+        fighters[i].status = 1;
+        if (fighters[i].x > MAPSIZED2){
+            fighters[i].x -= MAPSIZE;
+        }
+        if (fighters[i].y > MAPSIZED2){
+            fighters[i].y -= MAPSIZE;
+        }
+        fighters[i].new         = 1;
+        fighters[i].nframe      = (random() % 1);
+        fighters[i].sprite_ptr  = NULL;
+    }
+}
+
 void fireBullet(){
     if (bullet_timer > NBULLET_TIMER_MAX){
         bullet_timer = 0;
         if (bullets[bullet_c].status < 0){
             bullets[bullet_c].status = ri;
-            bullets[bullet_c].new          = 1;
+            bullets[bullet_c].new    = 1;
             bullets[bullet_c].x      = x+4;
             bullets[bullet_c].y      = y+4;
             bullet_c += 1;
@@ -344,11 +429,94 @@ void fireBullet(){
     }
 }
 
+void updateFighters()
+{
+
+    s16 fdx; //Position of fighter relative to space ship
+    s16 fdy;
+    s16 fvxapp; //Applied velocity to space ship.
+    s16 fvyapp;
+    // s16 attack = 0;
+
+    for (s16 ii = 0; ii < nfighter; ii++) {
+        if ((fighters[ii].status >= 0) & (fighters[ii].new > 0)){
+
+            if (fighters[ii].x > 0 && fighters[ii].x < screen_w && fighters[ii].y > 0 && fighters[ii].y < screen_h){
+                fighters[ii].sprite_ptr = SPR_addSprite(&fighter_sprite_res,
+                                                fighters[ii].x,
+                                                fighters[ii].y,
+                                                TILE_ATTR(PAL1, TRUE, FALSE, FALSE));
+                fighters[ii].new = 0;
+            }
+        }
+
+
+        if (fighters[ii].status >= 0){
+
+            fdx = x - fighters[ii].x;
+            fdy = y - fighters[ii].y;
+
+            if (nframe == 30){
+
+                fighters[ii].nframe = (fighters[ii].nframe + 1) % 2;
+                SPR_setFrame(fighters[ii].sprite_ptr, fighters[ii].nframe);
+
+                if (random()>32000){
+
+                    if (fdx > 0){
+                        fighters[ii].vx = fighters[ii].vxi;
+                    } else {
+                        fighters[ii].vx = -fighters[ii].vxi;
+                    }
+                }
+
+                if (random()>32000){
+                    if (fdy > 0){
+                        fighters[ii].vy = fighters[ii].vyi;
+                    } else {
+                        fighters[ii].vy = -fighters[ii].vyi;
+                    }
+                }
+            }           
+
+            fvxapp = (fighters[ii].vx + fighters[ii].xrem) >> 8;
+            fvyapp = (fighters[ii].vy + fighters[ii].yrem) >> 8;
+            fighters[ii].xrem = fighters[ii].vx + fighters[ii].xrem - fvxapp * 256;
+            fighters[ii].yrem = fighters[ii].vy + fighters[ii].yrem - fvyapp * 256;
+            fighters[ii].dx = fvxapp;
+            fighters[ii].dy = fvyapp;
+
+
+            fighters[ii].x += -dx + fighters[ii].dx;
+
+
+            if (fighters[ii].x <= MMAPSIZED2){
+                fighters[ii].x += MAPSIZE;
+            }
+            if (fighters[ii].x > MAPSIZED2){
+                fighters[ii].x -= MAPSIZE;
+            }
+
+            fighters[ii].y += -dy + fighters[ii].dy;
+
+            if (fighters[ii].y <= MMAPSIZED2){
+                fighters[ii].y += MAPSIZE;
+            }
+            if (fighters[ii].y > MAPSIZED2){
+                fighters[ii].y -= MAPSIZE;
+            } 
+
+            SPR_setPosition(fighters[ii].sprite_ptr, fighters[ii].x, fighters[ii].y);
+
+        }
+    }
+}
+
 // --- Update bullets fired by player --- ///
 void updateBullets()
 {
-    const s16 screen_w = VDP_getScreenWidth();
-    const s16 screen_h = VDP_getScreenHeight();
+    // const s16 screen_w = VDP_getScreenWidth();
+    // const s16 screen_h = VDP_getScreenHeight();
     
     for (s16 ii = 0; ii < NBULLET; ii++) {
             if ((bullets[ii].status >= 0) & (bullets[ii].new > 0)){

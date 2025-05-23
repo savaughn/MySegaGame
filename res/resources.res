@@ -13,6 +13,7 @@ TILESET bg_near_tiles       "near_stars_tiles.png" NONE
 PALETTE player_palette        	"player_sprite_sheet.png" 
 SPRITE  player_sprite_res     	"player_sprite_sheet.png"   2    2    NONE        0         NONE      NONE
 SPRITE  bullet_sprite_res     	"bullet_sprite.png"         1    1    NONE        0         NONE      NONE
+SPRITE  fighter_sprite_res     	"fighter_sprite-Sheet.png"  1    1    NONE        0         NONE      NONE
 
 // Sound effects
 WAV 	sfx_laser 				"laser.wav" 				XGM
