@@ -305,8 +305,8 @@ int main()
         VDP_clearText(1, 2, DEBUG_TEXT_LEN + 6); // Clear area for Y velocity (X=1, Y=2, Length="VelY: "+value)
 
         // Convert fix16 velocities to strings (e.g., 3 decimal places)
-        intToStr(scroll_a_x, text_vel_x, 0);
-        intToStr(scroll_a_y, text_vel_y, 0);
+        intToStr(x, text_vel_x, 0);
+        intToStr(y, text_vel_y, 0);
 
 
         // VDP_setWindowOnTop(28);
@@ -471,16 +471,16 @@ void updateFighters()
 
 
             fighters[ii].x += -dx + fighters[ii].dx;
+            fighters[ii].y += -dy + fighters[ii].dy;
 
 
+            // There is likely something buggyt here...
             if (fighters[ii].x <= MMAPSIZED2){
                 fighters[ii].x += MAPSIZE;
             }
             if (fighters[ii].x > MAPSIZED2){
                 fighters[ii].x -= MAPSIZE;
             }
-
-            fighters[ii].y += -dy + fighters[ii].dy;
 
             if (fighters[ii].y <= MMAPSIZED2){
                 fighters[ii].y += MAPSIZE;
