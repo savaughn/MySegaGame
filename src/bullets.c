@@ -65,12 +65,10 @@ void updateBullets()
                         bullets[i].status = -1; // Deactivate bullet
                         if(bullets[i].sprite_ptr) SPR_releaseSprite(bullets[i].sprite_ptr);
                         bullets[i].sprite_ptr = NULL;
-                        // SPR_setPosition(bullets[i].sprite_ptr, -16, -16); // Move offscreen before release
 
-                        fighters[f].status = -1; // Deactivate fighter
+                        fighters[f].status = -9; // Deactivate fighter (-8 means we do an explosion)
                         if(fighters[f].sprite_ptr) SPR_releaseSprite(fighters[f].sprite_ptr);
                         fighters[f].sprite_ptr = NULL;
-                        // SPR_setPosition(fighters[f].sprite_ptr, -16, -16);
                         
                         // Potentially add explosion, score, sound effect here
                         break; // Bullet can only hit one fighter per frame

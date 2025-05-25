@@ -129,11 +129,28 @@ void updateFighters()
                     SPR_setVisibility(fighters[i].sprite_ptr, HIDDEN); // Hide if off-screen
                 }
             }
-        } else { // Fighter is inactive
-            if(fighters[i].sprite_ptr) {
-                 //SPR_releaseSprite(fighters[i].sprite_ptr); // Done in bullet collision
-                 //fighters[i].sprite_ptr = NULL;
+        } else if (fighters[i].status < -1){ // Fighter is exploding
+            if (fighters[i].status == -9){
+                fexplode[i].sprite_ptr = SPR_addSprite(&fighter_explode_res,
+                                                    fighters[i].x,
+                                                    fighters[i].y,
+                                                    TILE_ATTR(PAL1, TRUE, FALSE, FALSE));
+                SPR_setPosition(fexplode[i].sprite_ptr, fighters[i].x, fighters[i].y);
+                fighters[i].status += 1;
+                break;
+            } else if (fighters[i].status == -2){
+                SPR_releaseSprite(fexplode[i].sprite_ptr);
+                // SPR_setVisibility(fexplode[i].sprite_ptr, HIDDEN);
+                fighters[i].status = -1;
+            } else {
+                SPR_setFrame(fexplode[i].sprite_ptr, fighters[i].status + 9);
+                fighters[i].status += 1;
             }
+
+            // if(fighters[i].sprite_ptr) {
+            //      //SPR_releaseSprite(fighters[i].sprite_ptr); // Done in bullet collision
+            //      //fighters[i].sprite_ptr = NULL;
+            // }
             // Potentially respawn logic here if FIGHTER_RATE was used
         }
     }

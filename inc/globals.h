@@ -100,6 +100,7 @@ extern s16 new_bullet_delay_timer; // Renamed bullet_timer
 
 // Fighter Pool and related
 extern Fighter fighters[NFIGHTER_MAX];
+extern Fighter fexplode[NFIGHTER_MAX];
 extern s16 active_fighter_count; // Renamed nfighter (maybe better to count active ones)
 
 // Debug Text Buffers

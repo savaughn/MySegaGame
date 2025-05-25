@@ -51,6 +51,7 @@ s16 new_bullet_delay_timer = 0;
 
 // Fighter Pool and related
 Fighter fighters[NFIGHTER_MAX];
+Fighter fexplode[NFIGHTER_MAX];
 s16 active_fighter_count = NFIGHTER_MAX; // Initial number of fighters
 
 // Debug Text Buffers
