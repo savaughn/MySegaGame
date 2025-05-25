@@ -112,4 +112,7 @@ extern s16 game_nframe; // Renamed nframe to be more specific
 // Tile indexing based on resource sizes
 #define BG_NEAR_TILE_INDEX (BG_FAR_TILE_INDEX + bg_far_tiles.numTile)
 
+// Loading background map
+extern u16 ind;
+
 #endif // GLOBALS_H

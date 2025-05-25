@@ -59,3 +59,6 @@ char text_vel_y[DEBUG_TEXT_LEN];
 
 // General frame counter
 s16 game_nframe = 0;
+
+// Backgrounds
+u16 ind = TILE_USER_INDEX;

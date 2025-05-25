@@ -9,8 +9,8 @@
 // BG_NEAR_TILE_INDEX will be defined in globals.h after bg_far_tiles is known
 #define BBX                     100
 #define BBY                     80
-#define PARALLAX_FACTOR_BG_B    4
-#define PARALLAX_FACTOR_BG_A    2
+#define PARALLAX_FACTOR_BG_B    1
+#define PARALLAX_FACTOR_BG_A    1
 
 #define MAPSIZE                 2048
 #define MMAPSIZE                -2048

@@ -1,13 +1,18 @@
 // res/resources.res
 
 
-// Background Layer (Far Stars - Plane B)
-PALETTE bg_far_palette      "far_stars_tiles.png"
-TILESET bg_far_tiles        "far_stars_tiles.png" NONE
+// // Background Layer (Far Stars - Plane B)
+// PALETTE bg_far_palette      "far_stars_tiles.png"
+// TILESET bg_far_tiles        "far_stars_tiles.png" NONE
+//
+// // Foreground Layer (Near Stars - Plane A)
+// PALETTE bg_near_palette     "near_stars_tiles.png"
+// TILESET bg_near_tiles       "near_stars_tiles.png" NONE
 
-// Foreground Layer (Near Stars - Plane A)
-PALETTE bg_near_palette     "near_stars_tiles.png"
-TILESET bg_near_tiles       "near_stars_tiles.png" NONE
+
+IMAGE 	starbg 			"Star_Map.png" BEST 
+PALETTE star_bg_pal 	"Star_Map.png"
+
 
 // Sprite Resources
 PALETTE player_palette        	"player_sprite_sheet.png" 
