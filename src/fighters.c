@@ -45,7 +45,7 @@ void initFighters(){
 
 void updateFighters()
 {
-    s16 f_screen_x, f_screen_y; // Fighter's screen position
+    // s16 f_screen_x, f_screen_y; // Fighter's screen position
     s16 fvx_applied, fvy_applied;
 
     for (s16 i = 0; i < active_fighter_count; i++) {
