@@ -23,7 +23,7 @@ PALETTE player_palette        	"Fighter_explode.png"
 PALETTE star_bg_pal 	        "Star_Map.png"
 
 // Sound effects
-WAV 	sfx_laser 				"laser.wav" 				XGM
+WAV 	sfx_laser 				"laser.wav" 				XGM2
 
 // Songs
-XGM 	track1 					"SMetroid_Red_Soil.vgm"		0
+XGM2 	track1 					"SMetroid_Red_Soil.vgm"	

@@ -33,7 +33,9 @@ void fireBullet(){
             if (current_bullet_index >= NBULLET){
                 current_bullet_index = 0;
             }
-            XGM_startPlayPCM(SFX_LASER, 1, SOUND_PCM_CH2);
+            // priority 0 is the lowest 
+            // XGM_startPlayPCM(SFX_LASER, 1, SOUND_PCM_CH2); //name, priority (0-15), channel (2-4) 
+            XGM2_playPCMEx(sfx_laser, sizeof(sfx_laser), SOUND_PCM_CH2, 1, TRUE, FALSE);
         }
     }
 }

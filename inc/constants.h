@@ -3,10 +3,10 @@
 #define CONSTANTS_H
 
 // --- Background & Scrolling Constants ---
-#define MAP_HW_WIDTH            64
-#define MAP_HW_HEIGHT           32
-#define BG_FAR_TILE_INDEX       TILE_USER_INDEX
-// BG_NEAR_TILE_INDEX will be defined in globals.h after bg_far_tiles is known
+// #define MAP_HW_WIDTH            64
+// #define MAP_HW_HEIGHT           32
+// #define BG_FAR_TILE_INDEX       TILE_USER_INDEX
+
 #define BBX                     100
 #define BBY                     80
 #define PARALLAX_FACTOR_BG_B    1
@@ -23,7 +23,7 @@
 // SINCOS_TABLE_STEPS definition will need to be near the actual table definition (e.g., in game_data.c or a math_utils.c)
 
 // --- Sound effects ---
-#define SFX_LASER               64
+#define SFX_LASER               64  // 0-63 are reserved for music
 
 // --- Spacecraft properties ---
 #define SHIP_ROT_SPEED          3

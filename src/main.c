@@ -29,7 +29,7 @@ int main()
     JOY_init();
     JOY_setSupport(PORT_1, JOY_SUPPORT_6BTN);
 
-    XGM_setPCM(SFX_LASER, sfx_laser, sizeof(sfx_laser)); // SFX_LASER from constants.h
+    // XGM_setPCM(SFX_LASER, sfx_laser, sizeof(sfx_laser)); // SFX_LASER from constants.h
 
     VDP_setScreenWidth320(); // Sets screen_width_pixels internally too via VDP_getScreenWidth
     //1 VDP_setPlaneSize(MAP_HW_WIDTH, MAP_HW_HEIGHT, TRUE); // Use TRUE for SGDK 1.7+ if using full 64x64 tilemap for one plane
@@ -76,8 +76,8 @@ int main()
                                 TILE_ATTR(PAL1, TRUE, FALSE, FALSE));
 
     // Start music
-    XGM_setLoopNumber(-1);
-    XGM_startPlay(track1);
+    XGM2_setLoopNumber(-1);
+    XGM2_play(track1);
 
     VDP_setBackgroundColor(0); // first index from PAL0 
     SYS_enableInts();
