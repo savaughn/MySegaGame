@@ -38,6 +38,8 @@ void initFighters(){
         fighters[i].yrem = 0;
         fighters[i].dx = 0; // Own movement delta
         fighters[i].dy = 0;
+
+        fexplode[i].status = 0; // for explosions
     }
 }
 
@@ -130,22 +132,32 @@ void updateFighters()
                 }
             }
         } else if (fighters[i].status < -1){ // Fighter is exploding
-            if (fighters[i].status == -9){
+            
+            fighters[i].x += -player_scroll_delta_x; // Adjust for map scroll
+            fighters[i].y += -player_scroll_delta_y; // Adjust for map scroll
+
+            if ((fighters[i].status == -9) & (fexplode[i].status == 0)){
                 fexplode[i].sprite_ptr = SPR_addSprite(&fighter_explode_res,
                                                     fighters[i].x,
                                                     fighters[i].y,
                                                     TILE_ATTR(PAL1, TRUE, FALSE, FALSE));
-                SPR_setPosition(fexplode[i].sprite_ptr, fighters[i].x, fighters[i].y);
-                fighters[i].status += 1;
-                break;
-            } else if (fighters[i].status == -2){
+                
+                fexplode[i].status = 5;
+            } else if ((fighters[i].status == -2) & (fexplode[i].status == 0)){
                 SPR_releaseSprite(fexplode[i].sprite_ptr);
                 // SPR_setVisibility(fexplode[i].sprite_ptr, HIDDEN);
-                fighters[i].status = -1;
-            } else {
+            } else if (fexplode[i].status == 0) {
                 SPR_setFrame(fexplode[i].sprite_ptr, fighters[i].status + 9);
+                fexplode[i].status = 5;
+            }
+            if (fexplode[i].status > 0){
+                SPR_setPosition(fexplode[i].sprite_ptr, fighters[i].x, fighters[i].y);
+                fexplode[i].status -= 1;
+            }
+            if (fexplode[i].status == 0){
                 fighters[i].status += 1;
             }
+            
 
             // if(fighters[i].sprite_ptr) {
             //      //SPR_releaseSprite(fighters[i].sprite_ptr); // Done in bullet collision
