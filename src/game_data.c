@@ -49,6 +49,13 @@ s16 fire_cooldown_timer = 0;
 s16 current_bullet_index = 0;
 s16 new_bullet_delay_timer = 0;
 
+// EBullet Pool and related
+Bullet ebullets[NEBULLET];
+s16 efire_cooldown_timer = 0;
+s16 current_ebullet_index = 0;
+s16 new_ebullet_delay_timer = 0;
+
+
 // Fighter Pool and related
 Fighter fighters[NFIGHTER_MAX];
 Fighter fexplode[NFIGHTER_MAX];

@@ -60,9 +60,9 @@ void updateBullets()
                 if (fighters[f].status >= 0){ // If fighter is active
                     // Simple AABB collision check (8x8 sprite assumed for fighter, 4x4 for bullet, adjust as needed)
                     if (fighters[f].x     < bullets[i].x + 2 && // fighter left < bullet right
-                        fighters[f].x + 6 > bullets[i].x     && // fighter right > bullet left
+                        fighters[f].x + 8 > bullets[i].x     && // fighter right > bullet left
                         fighters[f].y     < bullets[i].y + 2 && // fighter top < bullet bottom
-                        fighters[f].y + 6 > bullets[i].y)       // fighter bottom > bullet top
+                        fighters[f].y + 8 > bullets[i].y)       // fighter bottom > bullet top
                     {
                         bullets[i].status = -1; // Deactivate bullet
                         if(bullets[i].sprite_ptr) SPR_releaseSprite(bullets[i].sprite_ptr);

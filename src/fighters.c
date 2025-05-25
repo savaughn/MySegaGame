@@ -137,7 +137,7 @@ void updateFighters()
             fighters[i].y += -player_scroll_delta_y; // Adjust for map scroll
 
             if ((fighters[i].status == -9) & (fexplode[i].status == 0)){
-                XGM2_playPCMEx(sfx_explode, sizeof(sfx_explode), SOUND_PCM_CH3, 1, TRUE, FALSE);
+                XGM2_playPCMEx(sfx_explode, sizeof(sfx_explode), SOUND_PCM_CH3, 15, TRUE, FALSE);
                 fexplode[i].sprite_ptr = SPR_addSprite(&fighter_explode_res,
                                                     fighters[i].x,
                                                     fighters[i].y,

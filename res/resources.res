@@ -15,6 +15,7 @@ IMAGE 	starbg 			        "Star_Map.png" BEST
 // Sprite Resources
 SPRITE  player_sprite_res     	"player_sprite_sheet.png"   2    2    NONE        0         NONE      NONE
 SPRITE  bullet_sprite_res     	"bullet_sprite.png"         1    1    NONE        0         NONE      NONE
+SPRITE  ebullet_sprite_res      "ebullet_sprite.png"        1    1    NONE        0         NONE      NONE
 SPRITE  fighter_sprite_res     	"fighter_sprite-Sheet.png"  1    1    NONE        0         NONE      NONE
 SPRITE  fighter_explode_res     "Fighter_explode.png"       1    1    NONE		  0			NONE	  NONE
 
@@ -24,6 +25,7 @@ PALETTE star_bg_pal 	        "Star_Map.png"
 
 // Sound effects
 WAV 	sfx_laser 				"laser.wav" 				  XGM2
+WAV     sfx_elaser				"elaser.wav"				  XGM2
 WAV     sfx_explode				"explosion_decompression.wav" XGM2
 
 // Songs

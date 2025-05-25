@@ -42,7 +42,7 @@ void handleInput()
     if (value & BUTTON_B) {
         fireBullet(); // Call fireBullet from bullets module
     }
-    new_bullet_delay_timer += 1; // This seems related to bullet firing rate
+    new_bullet_delay_timer += 1; // This is related to bullet firing rate
 }
 
 // --- Physics Update Function ---
@@ -70,7 +70,7 @@ void updatePhysics()
     }
 
     //Update momentum by applying friction
-    if (player_thrust_delay_timer < player_thrust_delay_max && player_thrust_counter > 50){ // magic number 50
+    if (player_thrust_delay_timer < player_thrust_delay_max && player_thrust_counter > 100){ // magic number 100 <-- should be parameterized
         player_thrust_delay_timer += 1;
         player_thrust_counter = 0;
         if (player_vx == 0){
@@ -84,7 +84,11 @@ void updatePhysics()
         player_thrust_momentum_x = 0;
         player_thrust_momentum_y = 0;
     }
-    player_thrust_counter += 1;
+
+    if (player_thrust_counter < 101){
+        player_thrust_counter += 1;
+    }
+    
 
     // Keep spacecraft in bounds and determine scroll delta
     if (xtry > scroll_boundary_x1 && xtry < scroll_boundary_x2){

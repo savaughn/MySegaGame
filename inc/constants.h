@@ -32,6 +32,10 @@
 #define NBULLET                 8
 #define NBULLET_TIMER_MAX       8
 
+// --- EBullet properties ---
+#define NEBULLET                8
+#define NEBULLET_TIMER_MAX      8
+
 // --- Fighter properties ---
 #define NFIGHTER_MAX            30
 #define FIGHTER_RATE            128 // Rate at which Fighters regenerate (currently unused but good to keep)

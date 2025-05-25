@@ -8,6 +8,8 @@
 
 #include "player.h"
 #include "bullets.h"
+#include "ebullets.h"
+
 #include "fighters.h"
 #include "background.h"
 
@@ -69,6 +71,7 @@ int main()
     // Initialize game entities
     initBullets();
     initFighters();
+    init_eBullets();
 
     // Create player sprite (player_x, player_y are from game_data.c)
     player_sprite = SPR_addSprite(&player_sprite_res,
@@ -88,7 +91,11 @@ int main()
         handleInput();
         updatePhysics();
         updateBullets();
-        updateFighters();
+
+        updateFighters();  // Enemy fighters
+        update_eBullets(); // Enemy bullets
+        fire_eBullet();    // Enemy attack
+        
         updateScrolling();
 
         SPR_setFrame(player_sprite, player_rotation_index);

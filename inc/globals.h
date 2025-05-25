@@ -98,6 +98,12 @@ extern s16 new_bullet_delay_timer; // Renamed bullet_timer
 // extern s16 bullet_vx_applied; // Renamed bvxapp
 // extern s16 bullet_vy_applied; // Renamed bvyapp
 
+// E-Bullet Pool
+extern Bullet ebullets[NEBULLET];
+extern s16 efire_cooldown_timer; 
+extern s16 current_ebullet_index; 
+extern s16 new_ebullet_delay_timer; 
+
 // Fighter Pool and related
 extern Fighter fighters[NFIGHTER_MAX];
 extern Fighter fexplode[NFIGHTER_MAX];
