@@ -77,7 +77,7 @@ void fire_eBullet(){
 
         		} else if (fighters[i].status > 1){
         			fighters[i].status += 1;
-        			if (fighters[i].status > 4){
+        			if (fighters[i].status > efire_cooldown_timer){  // here is the delay for the next bullet to be fired.  
         				fighters[i].status = 1; // Ready to fire again.
         			}
 

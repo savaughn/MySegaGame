@@ -115,7 +115,7 @@ int main()
 
         // --- Draw Player Score ---
         if (player_score != player_score_old ){
-            VDP_clearText(1, 1, 12);
+            VDP_clearText(1, 1, 10);
             intToStr(player_score, text_vel_x, 5); // Using player_x from globals
             VDP_drawText("You:", 1, 1); VDP_drawText(text_vel_x, 6, 1);
             player_score_old = player_score;
@@ -127,6 +127,14 @@ int main()
             intToStr(fighters_score, text_vel_x, 5); // Using player_x from globals
             VDP_drawText(":Enemy", 34, 1); VDP_drawText(text_vel_x, 28, 1);
             fighters_score_old = fighters_score;
+        }
+
+        // --- Draw Level Indicator ---
+        if (game_level != game_level_old ){
+            VDP_clearText(16, 1, 8);
+            intToStr(game_level, text_vel_x, 2); // Using player_x from globals
+            VDP_drawText("Level", 16, 1); VDP_drawText(text_vel_x, 22, 1);
+            game_level_old = game_level;
         }
 
         // --- Debug for fighter positions --- //
@@ -148,9 +156,27 @@ int main()
             XGM2_stop();
             if (player_score > fighters_score){
                 VDP_drawText(" You Win! ", 15, 13);
+
+                game_level += 1;
+                efire_cooldown_timer -= 4;
+                if (efire_cooldown_timer < 4){
+                    efire_cooldown_timer = 4;
+                }
+
+                // player_score = 0;
+                // player_score_old = 1;
+                // fighters_score = 0;
+                // fighters_score_old = 1;
+                score_to_win += 100;
+
             }
             else {
                 VDP_drawText(" You Suck ", 15, 13);
+
+                player_score = 0;
+                player_score_old = 1;
+                fighters_score = 0;
+                fighters_score_old = 1;
             }
 
             VDP_drawText("Push Start", 15, 14);
@@ -168,10 +194,6 @@ int main()
             VDP_clearText(15, 13, DEBUG_TEXT_LEN + 6);
             VDP_clearText(15, 14, DEBUG_TEXT_LEN + 6);
 
-            player_score = 0;
-            player_score_old = 1;
-            fighters_score = 0;
-            fighters_score_old = 1;
 
             XGM2_play(track1);
 

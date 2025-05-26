@@ -88,6 +88,7 @@ void title_screen(){
     VDP_clearText(15, 13, DEBUG_TEXT_LEN + 6);
     VDP_clearText(15, 14, DEBUG_TEXT_LEN + 6);
     VDP_clearText(15, 15, DEBUG_TEXT_LEN + 6);
+    game_level_old = 0; // Reset to allow screen updates
 
 }
 
@@ -99,4 +100,5 @@ void init_game_vars(){
     fighters_score_old = 1;
     score_to_win = 100;
     game_level = 1;
+    game_level_old = 0;
 }
