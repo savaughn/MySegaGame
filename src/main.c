@@ -6,6 +6,8 @@
 #include "globals.h"        // For global variable declarations and structs
 #include "constants.h"      // For game constants
 
+#include "title_screen.h"
+
 #include "player.h"
 #include "bullets.h"
 #include "ebullets.h"
@@ -63,34 +65,9 @@ int main()
     VDP_setScrollingMode(HSCROLL_PLANE, VSCROLL_PLANE);
     initBackground(); // Initializes tiles, maps, and initial scroll
 
+    init_game_vars(); // Set up player/enemy scores
 
-
-
-    player_score = 0;
-    player_score_old = 1;
-    fighters_score = 0;
-    fighters_score_old = 1;
-    score_to_win = 100;
-
-    VDP_drawText("  Ready?  ", 15, 13);
-    VDP_drawText("Push Start", 15, 14);
-
-    while(1){
-        
-        
-        u16 value = JOY_readJoypad(JOY_1);
-        if (value & BUTTON_START) {
-            break;
-        }
-
-        SPR_update();
-        SYS_doVBlankProcess();
-    }
-
-    VDP_clearText(15, 13, DEBUG_TEXT_LEN + 6);
-    VDP_clearText(15, 14, DEBUG_TEXT_LEN + 6);
-
-
+    title_screen();   // Show title screen.
 
     // Initialize game entities
     initBullets();
@@ -151,6 +128,18 @@ int main()
             VDP_drawText(":Enemy", 34, 1); VDP_drawText(text_vel_x, 28, 1);
             fighters_score_old = fighters_score;
         }
+
+        // --- Debug for fighter positions --- //
+        // VDP_clearText(1, 2, 15);
+        // s16 npos = 0;
+        // for (s16 i = 0; i < active_fighter_count; i++) {
+        //     if (fighters[i].x < 0){
+        //         npos += 1;
+        //     }
+
+        // }
+        // intToStr(npos, text_vel_x, 5);
+        // VDP_drawText("FGX:", 1, 2); VDP_drawText(text_vel_x, 6, 2);
 
         if ((fighters_score > score_to_win) | (player_score > score_to_win)){
             

@@ -23,7 +23,7 @@
 // SINCOS_TABLE_STEPS definition will need to be near the actual table definition (e.g., in game_data.c or a math_utils.c)
 
 // --- Sound effects ---
-#define SFX_LASER               64  // 0-63 are reserved for music
+#define SFX_LASER               64  // 0-63 are reserved for music <- not used with XGM2
 
 // --- Spacecraft properties ---
 #define SHIP_ROT_SPEED          3

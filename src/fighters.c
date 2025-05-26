@@ -6,8 +6,6 @@
 
 void initFighters(){
     for (s16 i = 0; i < active_fighter_count; i++) {
-        fighters[i].x = (random() % (MAPSIZEM1 - screen_width_pixels)) + screen_width_pixels + 1; // World coordinates
-        fighters[i].y = (random() % (MAPSIZEM1 - screen_height_pixels)) + screen_height_pixels + 1;
         fighters[i].vxi = (random() % 256) + 16; // Base speed component
         fighters[i].vyi = (random() % 256) + 16;
         // fighters[i].vx = fighters[i].vxi; // Initial velocity (this was x in original)
@@ -25,11 +23,20 @@ void initFighters(){
 
         // Wrap initial position to be within one map iteration from origin if needed
         // This logic might need refinement based on how world coords map to screen initially
-        if (fighters[i].x > MAPSIZED2) fighters[i].x -= MAPSIZE;
-        if (fighters[i].x < MMAPSIZED2) fighters[i].x += MAPSIZE; // Ensure positive if wrapped
-        if (fighters[i].y > MAPSIZED2) fighters[i].y -= MAPSIZE;
-        if (fighters[i].y < MMAPSIZED2) fighters[i].y += MAPSIZE;
-
+        // fighters[i].x = (random() % (MAPSIZEM1 - screen_width_pixels)) + screen_width_pixels + 1; // World coordinates
+        // fighters[i].y = (random() % (MAPSIZEM1 - screen_height_pixels)) + screen_height_pixels + 1;
+        // if (fighters[i].x >  MAPSIZED2) fighters[i].x -= MAPSIZE;
+        // if (fighters[i].x < MMAPSIZED2) fighters[i].x += MAPSIZE; // Ensure positive if wrapped
+        // if (fighters[i].y >  MAPSIZED2) fighters[i].y -= MAPSIZE;
+        // if (fighters[i].y < MMAPSIZED2) fighters[i].y += MAPSIZE;
+        fighters[i].x = (random() % (MAPSIZED2 - screen_width_pixels)) + screen_width_pixels + 144;
+        fighters[i].y = (random() % (MAPSIZED2 - screen_height_pixels)) + screen_height_pixels + 104;
+        if (random()%2){
+            fighters[i].x = -fighters[i].x;
+        }
+        if (random()%2){
+            fighters[i].y = -fighters[i].y;
+        }
 
         fighters[i].new_fighter = 1; // Needs sprite
         fighters[i].nframe_fighter = (random() % 2); // Assuming 2 frames for fighter animation
@@ -116,10 +123,14 @@ void updateFighters()
             // For now, let's assume fighters[i].x/y are *screen-relative world coordinates*
             // that get "scrolled" by player_scroll_delta_x/y.
             // They wrap around a virtual world.
-            if (fighters[i].x < MMAPSIZED2 - screen_width_pixels/2) fighters[i].x += MAPSIZE;
-            if (fighters[i].x > MAPSIZED2 + screen_width_pixels/2) fighters[i].x -= MAPSIZE;
-            if (fighters[i].y < MMAPSIZED2 - screen_height_pixels/2) fighters[i].y += MAPSIZE;
-            if (fighters[i].y > MAPSIZED2 + screen_height_pixels/2) fighters[i].y -= MAPSIZE;
+            // if (fighters[i].x < MMAPSIZED2 - screen_width_pixels/2) fighters[i].x += MAPSIZE;
+            // if (fighters[i].x > MAPSIZED2 + screen_width_pixels/2) fighters[i].x -= MAPSIZE;
+            // if (fighters[i].y < MMAPSIZED2 - screen_height_pixels/2) fighters[i].y += MAPSIZE;
+            // if (fighters[i].y > MAPSIZED2 + screen_height_pixels/2) fighters[i].y -= MAPSIZE;
+            if (fighters[i].x >  MAPSIZED2) fighters[i].x -= MAPSIZE;
+            if (fighters[i].x < MMAPSIZED2) fighters[i].x += MAPSIZE; // Ensure positive if wrapped
+            if (fighters[i].y >  MAPSIZED2) fighters[i].y -= MAPSIZE;
+            if (fighters[i].y < MMAPSIZED2) fighters[i].y += MAPSIZE;
 
             if (fighters[i].sprite_ptr) {
                 // Check if fighter is on screen before drawing

@@ -62,7 +62,7 @@ Fighter fexplode[NFIGHTER_MAX];
 s16 active_fighter_count = NFIGHTER_MAX; // Initial number of fighters
 
 // Debug Text Buffers
-char text_vel_x[DEBUG_TEXT_LEN];
+char text_vel_x[DEBUG_TEXT_LEN];  // defaulting to 16
 char text_vel_y[DEBUG_TEXT_LEN];
 
 // General frame counter
@@ -77,3 +77,5 @@ u16 player_score_old = 1;
 u16 fighters_score = 0;
 u16 fighters_score_old = 1;
 u16 score_to_win = 10;
+u16 game_level = 1;
+u16 game_level_old = 1;
