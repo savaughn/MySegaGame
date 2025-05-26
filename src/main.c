@@ -36,8 +36,8 @@ int main()
     VDP_setScreenWidth320(); // Sets screen_width_pixels internally too via VDP_getScreenWidth
     //1 VDP_setPlaneSize(MAP_HW_WIDTH, MAP_HW_HEIGHT, TRUE); // Use TRUE for SGDK 1.7+ if using full 64x64 tilemap for one plane
 
-    // Setup text plane (WINDOW)
-    VDP_setTextPlane(WINDOW);
+    // Setup text plane (BG_A)
+    VDP_setTextPlane(BG_A);
     VDP_setTextPalette(PAL3);
     VDP_setWindowHPos(FALSE, 0);
     VDP_setWindowVPos(FALSE, 0); // Usually 0 for top lines, or adjust
@@ -63,10 +63,34 @@ int main()
     VDP_setScrollingMode(HSCROLL_PLANE, VSCROLL_PLANE);
     initBackground(); // Initializes tiles, maps, and initial scroll
 
-    // New background
-    // u16 ind = TILE_USER_INDEX;
-    // PAL_setPalette(PAL0, starbg.palette->data, DMA_QUEUE);
-    // VDP_drawImageEx(BG_B, &starbg, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, ind), 0, 0, FALSE, TRUE);
+
+
+
+    player_score = 0;
+    player_score_old = 1;
+    fighters_score = 0;
+    fighters_score_old = 1;
+    score_to_win = 100;
+
+    VDP_drawText("  Ready?  ", 15, 13);
+    VDP_drawText("Push Start", 15, 14);
+
+    while(1){
+        
+        
+        u16 value = JOY_readJoypad(JOY_1);
+        if (value & BUTTON_START) {
+            break;
+        }
+
+        SPR_update();
+        SYS_doVBlankProcess();
+    }
+
+    VDP_clearText(15, 13, DEBUG_TEXT_LEN + 6);
+    VDP_clearText(15, 14, DEBUG_TEXT_LEN + 6);
+
+
 
     // Initialize game entities
     initBullets();
@@ -81,6 +105,7 @@ int main()
     // Start music
     XGM2_setLoopNumber(-1);
     XGM2_play(track1);
+    XGM2_setFMVolume(50);
 
     VDP_setBackgroundColor(0); // first index from PAL0 
     SYS_enableInts();
@@ -111,6 +136,60 @@ int main()
         // VDP_drawText("PosY:", 1, 2); VDP_drawText(text_vel_y, 7, 2);
         // // char nfs[5]; intToStr(active_fighter_count, nfs, 0); VDP_drawText(nfs, 1, 3); // Example
 
+        // --- Draw Player Score ---
+        if (player_score != player_score_old ){
+            VDP_clearText(1, 1, 12);
+            intToStr(player_score, text_vel_x, 5); // Using player_x from globals
+            VDP_drawText("You:", 1, 1); VDP_drawText(text_vel_x, 6, 1);
+            player_score_old = player_score;
+        }
+
+        // --- Draw Player Score ---
+        if (fighters_score != fighters_score_old ){
+            VDP_clearText(28, 1, 13);
+            intToStr(fighters_score, text_vel_x, 5); // Using player_x from globals
+            VDP_drawText(":Enemy", 34, 1); VDP_drawText(text_vel_x, 28, 1);
+            fighters_score_old = fighters_score;
+        }
+
+        if ((fighters_score > score_to_win) | (player_score > score_to_win)){
+            
+            // Game over loop
+    
+            XGM2_stop();
+            if (player_score > fighters_score){
+                VDP_drawText(" You Win! ", 15, 13);
+            }
+            else {
+                VDP_drawText(" You Suck ", 15, 13);
+            }
+
+            VDP_drawText("Push Start", 15, 14);
+            while(1){
+                
+                u16 value = JOY_readJoypad(JOY_1);
+                if (value & BUTTON_START) {
+                    break;
+                }
+
+                SPR_update();
+                SYS_doVBlankProcess();
+            }
+
+            VDP_clearText(15, 13, DEBUG_TEXT_LEN + 6);
+            VDP_clearText(15, 14, DEBUG_TEXT_LEN + 6);
+
+            player_score = 0;
+            player_score_old = 1;
+            fighters_score = 0;
+            fighters_score_old = 1;
+
+            XGM2_play(track1);
+
+
+        }
+        
+
         game_nframe++; // Use game_nframe from globals
         if (game_nframe >= 60){ // Use >= to ensure it resets
             game_nframe = 0;
@@ -119,5 +198,8 @@ int main()
         SPR_update();
         SYS_doVBlankProcess();
     }
+
+    
+
     return (0);
 }

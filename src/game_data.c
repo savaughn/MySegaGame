@@ -70,3 +70,10 @@ s16 game_nframe = 0;
 
 // Backgrounds
 u16 ind = TILE_USER_INDEX;
+
+// Score
+u16 player_score = 0;
+u16 player_score_old = 1;
+u16 fighters_score = 0;
+u16 fighters_score_old = 1;
+u16 score_to_win = 10;

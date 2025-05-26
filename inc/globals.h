@@ -122,4 +122,11 @@ extern s16 game_nframe; // Renamed nframe to be more specific
 // Loading background map
 extern u16 ind;
 
+// Scores
+extern u16 player_score;
+extern u16 player_score_old;
+extern u16 fighters_score;
+extern u16 fighters_score_old;
+extern u16 score_to_win;
+
 #endif // GLOBALS_H

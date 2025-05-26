@@ -6,8 +6,8 @@
 
 void initFighters(){
     for (s16 i = 0; i < active_fighter_count; i++) {
-        fighters[i].x = (random() % MAPSIZEM1) + 1; // World coordinates
-        fighters[i].y = (random() % MAPSIZEM1) + 1;
+        fighters[i].x = (random() % (MAPSIZEM1 - screen_width_pixels)) + screen_width_pixels + 1; // World coordinates
+        fighters[i].y = (random() % (MAPSIZEM1 - screen_height_pixels)) + screen_height_pixels + 1;
         fighters[i].vxi = (random() % 256) + 16; // Base speed component
         fighters[i].vyi = (random() % 256) + 16;
         // fighters[i].vx = fighters[i].vxi; // Initial velocity (this was x in original)
@@ -144,9 +144,22 @@ void updateFighters()
                                                     TILE_ATTR(PAL1, TRUE, FALSE, FALSE));
                 
                 fexplode[i].status = 5;
+                player_score += 1;
             } else if ((fighters[i].status == -2) & (fexplode[i].status == 0)){
                 SPR_releaseSprite(fexplode[i].sprite_ptr);
                 // SPR_setVisibility(fexplode[i].sprite_ptr, HIDDEN);
+
+                // Add fighter back to pool.
+                fighters[i].x = (random() % (MAPSIZEM1 - screen_width_pixels)) + screen_width_pixels + 1; // World coordinates
+                fighters[i].y = (random() % (MAPSIZEM1 - screen_height_pixels)) + screen_height_pixels + 1;
+
+                if (fighters[i].x > MAPSIZED2) fighters[i].x -= MAPSIZE;
+                if (fighters[i].x < MMAPSIZED2) fighters[i].x += MAPSIZE; // Ensure positive if wrapped
+                if (fighters[i].y > MAPSIZED2) fighters[i].y -= MAPSIZE;
+                if (fighters[i].y < MMAPSIZED2) fighters[i].y += MAPSIZE;
+                
+                fighters[i].status = 1; // Active
+                fighters[i].new_fighter = 1;
             } else if (fexplode[i].status == 0) {
                 SPR_setFrame(fexplode[i].sprite_ptr, fighters[i].status + 9);
                 fexplode[i].status = 5;

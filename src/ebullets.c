@@ -77,7 +77,7 @@ void fire_eBullet(){
 
         		} else if (fighters[i].status > 1){
         			fighters[i].status += 1;
-        			if (fighters[i].status > 8){
+        			if (fighters[i].status > 4){
         				fighters[i].status = 1; // Ready to fire again.
         			}
 
@@ -117,6 +117,8 @@ void update_eBullets(){
                 ebullets[i].status = -1; // Deactivate bullet
                 if(ebullets[i].sprite_ptr) SPR_releaseSprite(ebullets[i].sprite_ptr);
                 ebullets[i].sprite_ptr = NULL;
+
+                fighters_score += 1; // Score one for the bad guys
                 
                 // Potentially add explosion, score, sound effect here
                 // break; // Bullet can only hit one fighter per frame

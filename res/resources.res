@@ -29,4 +29,4 @@ WAV     sfx_elaser				"elaser.wav"				  XGM2
 WAV     sfx_explode				"explosion_decompression.wav" XGM2
 
 // Songs
-XGM2 	track1 					"SMetroid_Red_Soil.vgm"	
+XGM2 	track1 					"UpBeat.vgm"	

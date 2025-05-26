@@ -85,7 +85,7 @@ void updatePhysics()
         player_thrust_momentum_y = 0;
     }
 
-    if (player_thrust_counter < 101){
+    if (player_thrust_counter < 101){ //catch runaway counter if player is idle for a long time.
         player_thrust_counter += 1;
     }
     
