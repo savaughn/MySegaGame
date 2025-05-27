@@ -36,6 +36,10 @@
 #define NEBULLET                8
 #define NEBULLET_TIMER_MAX      8
 
+// --- SBullet properties ---
+#define NSBULLET                3  // Only one spread-shot at a time
+#define NSBULLET_TIMER_MAX      60
+
 // --- Fighter properties ---
 #define NFIGHTER_MAX            30
 #define FIGHTER_RATE            128 // Rate at which Fighters regenerate (currently unused but good to keep)

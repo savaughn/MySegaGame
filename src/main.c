@@ -12,6 +12,7 @@
 #include "player.h"
 #include "bullets.h"
 #include "ebullets.h"
+#include "sbullets.h"
 
 #include "fighters.h"
 #include "background.h"
@@ -72,6 +73,7 @@ int main()
 
     // Initialize game entities
     initBullets();
+    init_SBullets();
     initFighters();
     init_eBullets();
 
@@ -94,6 +96,7 @@ int main()
         handleInput();
         updatePhysics();
         updateBullets();
+        update_SBullets();
 
         updateFighters();  // Enemy fighters
         update_eBullets(); // Enemy bullets

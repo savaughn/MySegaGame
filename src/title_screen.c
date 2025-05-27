@@ -89,6 +89,13 @@ void title_screen(){
     VDP_clearText(15, 14, DEBUG_TEXT_LEN + 6);
     VDP_clearText(15, 15, DEBUG_TEXT_LEN + 6);
     game_level_old = 0; // Reset to allow screen updates
+    efire_cooldown_timer = 4 * (5 - game_level);
+    if (efire_cooldown_timer > 16){
+        efire_cooldown_timer = 16;
+    }
+    else if (efire_cooldown_timer < 4){
+        efire_cooldown_timer = 4;
+    }
 
 }
 

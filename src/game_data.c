@@ -45,16 +45,21 @@ s16 player_scroll_delta_y = 0;
 
 // Bullet Pool and related
 Bullet bullets[NBULLET];
-s16 fire_cooldown_timer = 0;
-s16 current_bullet_index = 0;
-s16 new_bullet_delay_timer = 0;
+u16 fire_cooldown_timer = 0;
+u16 current_bullet_index = 0;
+u16 new_bullet_delay_timer = 0;
 
 // EBullet Pool and related
 Bullet ebullets[NEBULLET];
-s16 efire_cooldown_timer = 16;
-s16 current_ebullet_index = 0;
-s16 new_ebullet_delay_timer = 0;
+u16 efire_cooldown_timer = 16;
+u16 current_ebullet_index = 0;
+u16 new_ebullet_delay_timer = 0;
 
+// SBullet Pool and related
+Bullet sbullets[NSBULLET];
+u16 sfire_cooldown_timer = 0;
+u16 current_sbullet_index = 0;
+u16 new_sbullet_delay_timer = 0;
 
 // Fighter Pool and related
 Fighter fighters[NFIGHTER_MAX];

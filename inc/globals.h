@@ -90,9 +90,9 @@ extern s16 player_scroll_delta_y; // Renamed dy
 
 // Bullet Pool and related
 extern Bullet bullets[NBULLET];
-extern s16 fire_cooldown_timer; // Renamed fire_cooldown
-extern s16 current_bullet_index; // Renamed bullet_c
-extern s16 new_bullet_delay_timer; // Renamed bullet_timer
+extern u16 fire_cooldown_timer; // Renamed fire_cooldown
+extern u16 current_bullet_index; // Renamed bullet_c
+extern u16 new_bullet_delay_timer; // Renamed bullet_timer
 // extern s16 bullet_vx_req; // Renamed bvx - seems calculated on the fly
 // extern s16 bullet_vy_req; // Renamed bvy
 // extern s16 bullet_vx_applied; // Renamed bvxapp
@@ -100,9 +100,15 @@ extern s16 new_bullet_delay_timer; // Renamed bullet_timer
 
 // E-Bullet Pool
 extern Bullet ebullets[NEBULLET];
-extern s16 efire_cooldown_timer; 
-extern s16 current_ebullet_index; 
-extern s16 new_ebullet_delay_timer; 
+extern u16 efire_cooldown_timer; 
+extern u16 current_ebullet_index; 
+extern u16 new_ebullet_delay_timer; 
+
+// S-Bullet Pool
+extern Bullet sbullets[NSBULLET];
+extern u16 sfire_cooldown_timer; 
+extern u16 current_sbullet_index; 
+extern u16 new_sbullet_delay_timer; 
 
 // Fighter Pool and related
 extern Fighter fighters[NFIGHTER_MAX];

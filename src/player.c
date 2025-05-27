@@ -1,8 +1,10 @@
 // player.c
 #include <genesis.h>
-#include "globals.h"   // For player variables, sin_fix, cos_fix, screen boundaries
+#include "globals.h"    // For player variables, sin_fix, cos_fix, screen boundaries
 #include "player.h"
-#include "bullets.h"   // For fireBullet()
+#include "bullets.h"    // For fireBullet()
+#include "sbullets.h"   // For fire_SBullet()
+
 
 // --- Input Handling Function ---
 void handleInput()
@@ -47,6 +49,12 @@ void handleInput()
         fireBullet(); // Call fireBullet from bullets module
     }
     new_bullet_delay_timer += 1; // This is related to bullet firing rate
+
+    // Fire secondary weapon
+    if (value & BUTTON_C) {
+        fire_SBullet(); // Call fireBullet from bullets module
+    }
+    new_sbullet_delay_timer += 1; // This is related to bullet firing rate
 }
 
 // --- Physics Update Function ---
