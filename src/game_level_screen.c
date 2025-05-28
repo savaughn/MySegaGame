@@ -87,18 +87,22 @@ void level_up(){
             value = JOY_readJoypad(JOY_1);
             if (value != value_old){
                 x = 0;
-            } else {
-                VDP_clearText(1, 5, DEBUG_TEXT_LEN + 6);
-                intToStr(value, text_vel_x, 5);
-                VDP_drawText("Button ", 1, 5);
-                VDP_drawText(text_vel_x , 9, 5);
-                value_old = value;
-            }
+            } 
+            // else {
+            //     VDP_clearText(1, 5, DEBUG_TEXT_LEN + 6);
+            //     intToStr(value, text_vel_x, 5);
+            //     VDP_drawText("Button ", 1, 5);
+            //     VDP_drawText(text_vel_x , 9, 5);
+            //     value_old = value;
+            // }
+
+            SPR_update();
+            SYS_doVBlankProcess();
         }
 
         // VDP_clearText(1, 5, DEBUG_TEXT_LEN + 6);
 
-        VDP_drawText("Hello? ", 1, 7);
+        // VDP_drawText("Hello? ", 1, 7);
 
         clear_sprites();
 
