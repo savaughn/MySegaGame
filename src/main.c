@@ -56,7 +56,6 @@ int main()
     scroll_boundary_y1 = BBY;
     scroll_boundary_y2 = screen_height_pixels - BBY;
 
-
     // Load Palettes
     //1 PAL_setPalette(PAL0, bg_far_palette.data, DMA_QUEUE);
     PAL_setPalette(PAL1, player_palette.data, DMA_QUEUE);

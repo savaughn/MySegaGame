@@ -68,7 +68,7 @@ void updateBullets()
                         if(bullets[i].sprite_ptr) SPR_releaseSprite(bullets[i].sprite_ptr);
                         bullets[i].sprite_ptr = NULL;
 
-                        fighters[f].status = -9; // Deactivate fighter (-8 means we do an explosion)
+                        fighters[f].status = -9; // Deactivate fighter (-9 means we do an explosion)
                         if(fighters[f].sprite_ptr) SPR_releaseSprite(fighters[f].sprite_ptr);
                         fighters[f].sprite_ptr = NULL;
                         
