@@ -17,11 +17,11 @@
 #include "fighters.h"
 #include "background.h"
 
-// Palette for debug font (can be here or in globals/game_data if shared)
-const u16 debug_font_palette[16] = {
-    0x0000, 0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE,
-    0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE
-};
+// // Palette for debug font (can be here or in globals/game_data if shared)
+// const u16 debug_font_palette[16] = {
+//     0x0000, 0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE,
+//     0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE, 0x0EEE
+// };
 
 // u16 ind = TILE_USER_INDEX;
 // Map* star_map;
@@ -61,15 +61,16 @@ int main()
     //1 PAL_setPalette(PAL0, bg_far_palette.data, DMA_QUEUE);
     PAL_setPalette(PAL1, player_palette.data, DMA_QUEUE);
     //1 PAL_setPalette(PAL2, bg_near_palette.data, DMA_QUEUE);
-    PAL_setPalette(PAL3, debug_font_palette, DMA_QUEUE);
+    PAL_setPalette(PAL3, title_pal_1.data, DMA_QUEUE);
 
     // Setup Background Planes
     VDP_setScrollingMode(HSCROLL_PLANE, VSCROLL_PLANE);
-    initBackground(); // Initializes tiles, maps, and initial scroll
 
     init_game_vars(); // Set up player/enemy scores
 
     title_screen();   // Show title screen.
+
+    initBackground(); // Initializes tiles, maps, and initial scroll
 
     // Initialize game entities
     initBullets();
