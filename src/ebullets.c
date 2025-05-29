@@ -129,6 +129,11 @@ void update_eBullets(){
 
 
             if (ebullets[i].status >= 0) {
+
+            	// This might degrade enemy aim? 
+            	ebullets[i].x += -player_scroll_delta_x; // Adjust for map scroll
+                ebullets[i].y += -player_scroll_delta_y; // Adjust for map scroll
+
 	            // bvx_req = -sin_fix[ebullets[i].status]; // Using stored direction
 	            // bvy_req = -cos_fix[ebullets[i].status];
 	            bvx_req =  cos_fix[ebullets[i].status]; // Using stored direction

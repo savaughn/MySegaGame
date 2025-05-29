@@ -82,6 +82,10 @@ void updateBullets()
             }
              // If bullet still active after collision checks
             if (bullets[i].status >= 0) {
+
+                // bullets[i].x += -player_scroll_delta_x; // Adjust for map scroll
+                // bullets[i].y += -player_scroll_delta_y; // Adjust for map scroll
+
                 bvx_req = -sin_fix[bullets[i].status]; // Using stored direction
                 bvy_req = -cos_fix[bullets[i].status];
 

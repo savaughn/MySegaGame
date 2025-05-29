@@ -129,8 +129,8 @@ extern s16 game_nframe; // Renamed nframe to be more specific
 extern u16 ind;
 
 // Scores and Levels
-extern u16 player_score;
-extern u16 player_score_old;
+extern s16 player_score;
+extern s16 player_score_old;
 extern u16 fighters_score;
 extern u16 fighters_score_old;
 extern u16 score_to_win;
@@ -153,6 +153,16 @@ extern u16 player_boost_timer_max; // How long the boost lasts
 extern u16 player_boost_delay_timer;
 extern u16 player_boost_delay_timer_max; // How often the player can boost
 extern s16 player_boost_status;
+
+// Space Mines
+extern s16 mine_status; // Shield is off.
+extern s16 mine_x;
+extern s16 mine_y;
+extern u16 mine_timer;   // Time for mine to arm itself
+extern u16 mine_timer_max;
+extern s16 mexplode_status;
+extern Sprite* mine_sprite_ptr;
+extern Sprite* mexplode_sprite_ptr;
 
 
 #endif // GLOBALS_H

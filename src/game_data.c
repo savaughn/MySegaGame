@@ -77,8 +77,8 @@ s16 game_nframe = 0;
 u16 ind = TILE_USER_INDEX;
 
 // Score
-u16 player_score = 0;
-u16 player_score_old = 1;
+s16 player_score = 0;
+s16 player_score_old = 1;
 u16 fighters_score = 0;
 u16 fighters_score_old = 1;
 u16 score_to_win = 10;
@@ -95,10 +95,21 @@ s16 shield_status = -1; // Shield is off.
 u16 shield_pal_timer = 0;
 u16 shield_pal_timer_switch = 10;
 
-//Boost
+// Boost
 u16 player_boost_timer = 0;
 u16 player_boost_timer_max = 20; // How long the boost lasts
 u16 player_boost_delay_timer = 60;
 u16 player_boost_delay_timer_max = 60; // How often the player can boost
 s16 player_boost_status = -1; // If boost is enabled
+
+// Space Mines
+s16 mine_status = -1; // Shield is off.
+s16 mine_x = 0;
+s16 mine_y = 0;
+u16 mine_timer      = 0;   // Time for mine to arm itself
+u16 mine_timer_max  = 120; // 120 -> 2 seconds to get away
+s16 mexplode_status = 0;
+Sprite* mine_sprite_ptr;
+Sprite* mexplode_sprite_ptr;
+
 

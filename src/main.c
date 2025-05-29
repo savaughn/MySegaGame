@@ -14,6 +14,7 @@
 #include "bullets.h"
 #include "ebullets.h"
 #include "sbullets.h"
+#include "spaceMines.h" // Space Mines
 
 #include "fighters.h"
 #include "background.h"
@@ -104,6 +105,7 @@ int main()
 
         updateBullets();
         update_SBullets();
+        updateMine();
 
         updateFighters();  // Enemy fighters
         update_eBullets(); // Enemy bullets

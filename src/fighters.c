@@ -29,8 +29,11 @@ void initFighters(){
         // if (fighters[i].x < MMAPSIZED2) fighters[i].x += MAPSIZE; // Ensure positive if wrapped
         // if (fighters[i].y >  MAPSIZED2) fighters[i].y -= MAPSIZE;
         // if (fighters[i].y < MMAPSIZED2) fighters[i].y += MAPSIZE;
-        fighters[i].x = (random() % (MAPSIZED2 - screen_width_pixels)) + screen_width_pixels + 144;
-        fighters[i].y = (random() % (MAPSIZED2 - screen_height_pixels)) + screen_height_pixels + 104;
+
+        // fighters[i].x = (random() % (MAPSIZED2 - screen_width_pixels)) + screen_width_pixels + 144;
+        // fighters[i].y = (random() % (MAPSIZED2 - screen_height_pixels)) + screen_height_pixels + 104;
+        fighters[i].x = (random() % (screen_width_pixels)) + screen_width_pixels + 144;
+        fighters[i].y = (random() % (screen_height_pixels)) + screen_height_pixels + 104;
         if (random()%2){
             fighters[i].x = -fighters[i].x;
         }
@@ -168,14 +171,16 @@ void updateFighters()
                 // if (fighters[i].y > MAPSIZED2) fighters[i].y -= MAPSIZE;
                 // if (fighters[i].y < MMAPSIZED2) fighters[i].y += MAPSIZE;
 
-                fighters[i].x = (random() % (MAPSIZED2 - screen_width_pixels)) + screen_width_pixels + 144;
-                fighters[i].y = (random() % (MAPSIZED2 - screen_height_pixels)) + screen_height_pixels + 104;
+                // fighters[i].x = (random() % (MAPSIZED2 - screen_width_pixels)) + screen_width_pixels + 144;
+                // fighters[i].y = (random() % (MAPSIZED2 - screen_height_pixels)) + screen_height_pixels + 104;
+                fighters[i].x = (random() % (screen_width_pixels)) + screen_width_pixels + 144;
+                fighters[i].y = (random() % (screen_height_pixels)) + screen_height_pixels + 104;
                 if (random()%2){
                     fighters[i].x = -fighters[i].x;
                 }
                 if (random()%2){
                     fighters[i].y = -fighters[i].y;
-        }
+                }
                 
                 fighters[i].status = 1; // Active
                 fighters[i].new_fighter = 1;

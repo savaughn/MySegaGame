@@ -5,6 +5,7 @@
 #include "bullets.h"    // For fireBullet()
 #include "sbullets.h"   // For fire_SBullet()
 #include "shield.h"     // Player Shield
+#include "spaceMines.h" // Space mines
 
 
 // --- Input Handling Function ---
@@ -81,6 +82,12 @@ void handleInput()
             XGM2_playPCMEx(sfx_turbo, sizeof(sfx_turbo), SOUND_PCM_CH2, 3, FALSE, FALSE);
         } 
     }
+
+    // Drop a mine
+    if (value & BUTTON_X){
+        placeMine();
+    }
+
 }
 
 void playerBoost(){

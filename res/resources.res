@@ -15,11 +15,13 @@ IMAGE   title 					"Title_screen.png"	BEST
 
 // Sprite Resources
 SPRITE  player_sprite_res     	"player_sprite_sheet.png"   2    2    NONE        0         NONE      NONE
+SPRITE  mine_explode_res        "Mine_explode.png"          2    2    NONE        0         NONE      NONE
 SPRITE  bullet_sprite_res     	"bullet_sprite.png"         1    1    NONE        0         NONE      NONE
-SPRITE  sbullet_sprite_res     	"sbullet_sprite.png"         1    1    NONE        0         NONE      NONE
+SPRITE  sbullet_sprite_res     	"sbullet_sprite.png"        1    1    NONE        0         NONE      NONE
 SPRITE  ebullet_sprite_res      "ebullet_sprite.png"        1    1    NONE        0         NONE      NONE
 SPRITE  fighter_sprite_res     	"fighter_sprite-Sheet.png"  1    1    NONE        0         NONE      NONE
 SPRITE  fighter_explode_res     "Fighter_explode.png"       1    1    NONE		  0			NONE	  NONE
+SPRITE  space_mine_res			"spaceMine-sheet.png"		1    1    NONE  	  0 		NONE      NONE
 
 // Palettes
 PALETTE player_palette        	"Fighter_explode.png"
@@ -40,6 +42,7 @@ WAV     sfx_elaser				"elaser.wav"				  XGM2
 WAV     sfx_explode				"explosion_decompression.wav" XGM2
 WAV     sfx_ding                "shield_ready.wav"			  XGM2
 WAV     sfx_turbo				"turbo_jet.wav"				  XGM2
+WAV     sfx_mexplode            "mexplode.wav"                XGM2
 
 // Songs
 XGM2 	track1 					"UpBeat.vgm"	
