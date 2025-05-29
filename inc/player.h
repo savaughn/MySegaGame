@@ -4,6 +4,7 @@
 
 void handleInput(void);
 void updatePhysics(void);
+void playerBoost(void);
 // No need to init player here, main.c can set initial x,y and sprite
 
 #endif // PLAYER_H

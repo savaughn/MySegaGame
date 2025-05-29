@@ -137,4 +137,22 @@ extern u16 score_to_win;
 extern u16 game_level;
 extern u16 game_level_old;
 
+// Ship Shield
+extern u16 new_shield_delay_timer;
+extern u16 shield_delay_max;
+extern u16 shield_timer;
+extern u16 shield_duration;
+extern u16 shield_pal;
+extern s16 shield_status;
+extern u16 shield_pal_timer;
+extern u16 shield_pal_timer_switch;
+
+//Boost
+extern u16 player_boost_timer;
+extern u16 player_boost_timer_max; // How long the boost lasts
+extern u16 player_boost_delay_timer;
+extern u16 player_boost_delay_timer_max; // How often the player can boost
+extern s16 player_boost_status;
+
+
 #endif // GLOBALS_H

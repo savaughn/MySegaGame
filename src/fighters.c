@@ -148,14 +148,13 @@ void updateFighters()
             fighters[i].y += -player_scroll_delta_y; // Adjust for map scroll
 
             if ((fighters[i].status == -9) & (fexplode[i].status == 0)){
-                XGM2_playPCMEx(sfx_explode, sizeof(sfx_explode), SOUND_PCM_CH3, 15, TRUE, FALSE);
+                XGM2_playPCMEx(sfx_explode, sizeof(sfx_explode), SOUND_PCM_CH3, 4, FALSE, FALSE);
                 fexplode[i].sprite_ptr = SPR_addSprite(&fighter_explode_res,
                                                     fighters[i].x,
                                                     fighters[i].y,
                                                     TILE_ATTR(PAL1, TRUE, FALSE, FALSE));
                 
                 fexplode[i].status = 5;
-                player_score += 1;
             } else if ((fighters[i].status == -2) & (fexplode[i].status == 0)){
                 SPR_releaseSprite(fexplode[i].sprite_ptr);
                 // SPR_setVisibility(fexplode[i].sprite_ptr, HIDDEN);
@@ -191,4 +190,31 @@ void updateFighters()
             // Potentially respawn logic here if FIGHTER_RATE was used
         }
     }
+}
+
+void collideFighters(){
+    for (s16 i = 0; i < active_fighter_count; i++) {
+        if (fighters[i].status >= 0) {
+
+            if (fighters[i].x     < player_x + 16 && // fighter left < bullet right
+                fighters[i].x + 8 > player_x      && // fighter right > bullet left
+                fighters[i].y     < player_y + 16 && // fighter top < bullet bottom
+                fighters[i].y + 8 > player_y)       // fighter bottom > bullet top
+            {
+                fighters[i].status = -9; // Deactivate fighter (-9 means we do an explosion)
+                if(fighters[i].sprite_ptr) SPR_releaseSprite(fighters[i].sprite_ptr);
+                fighters[i].sprite_ptr = NULL;
+
+                if(shield_status <= 0){
+                    fighters_score += 1; // If shield down, enemy gets a point
+                } else {
+                    player_score += 1;   // If shield is up, player gets a point
+                }
+
+            }
+
+
+        }
+    }
+
 }

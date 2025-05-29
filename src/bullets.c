@@ -35,7 +35,7 @@ void fireBullet(){
             }
             // priority 0 is the lowest 
             // XGM_startPlayPCM(SFX_LASER, 1, SOUND_PCM_CH2); //name, priority (0-15), channel (2-4) 
-            XGM2_playPCMEx(sfx_laser, sizeof(sfx_laser), SOUND_PCM_CH2, 1, TRUE, FALSE);
+            XGM2_playPCMEx(sfx_laser, sizeof(sfx_laser), SOUND_PCM_CH2, 2, FALSE, FALSE);
         }
     }
 }
@@ -71,6 +71,8 @@ void updateBullets()
                         fighters[f].status = -9; // Deactivate fighter (-9 means we do an explosion)
                         if(fighters[f].sprite_ptr) SPR_releaseSprite(fighters[f].sprite_ptr);
                         fighters[f].sprite_ptr = NULL;
+
+                        player_score += 1;
                         
                         // Potentially add explosion, score, sound effect here
                         break; // Bullet can only hit one fighter per frame

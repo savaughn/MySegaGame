@@ -24,7 +24,7 @@ void level_up(){
     
     XGM2_stop();
     if (player_score > fighters_score){
-        VDP_drawText(" You Win! ", 15, 13);
+        VDP_drawText(" Level Up!", 15, 13);
 
         game_level += 1;
         efire_cooldown_timer -= 4;
@@ -40,7 +40,8 @@ void level_up(){
 
     }
     else {
-        VDP_drawText(" You Lose ", 15, 13);  // This is the game-over part...
+        // VDP_drawText(" You Lose ", 15, 13);  // This is the game-over part...
+        VDP_drawText(" Game Over", 15, 13);  // This is the game-over part...
 
         // Once we have a proper game loop the next 4 lines can probably be removed.
         player_score = 0;
@@ -69,18 +70,7 @@ void level_up(){
     // Reset game.
     if (game_over){
 
-        // u8 x = 0;
-        // while(x == 0){
-        //     value = JOY_readJoypad(JOY_1);
-        //     if ((value & BUTTON_START) & (value_old != value)){
-        //         x = 1;
-        //     } else {
-        //         value_old = value;
-        //     }
-        // }
         
-
-        // This fucking won't work....
         value_old = JOY_readJoypad(JOY_1);
         u8 x = 1;
         while(x){
@@ -100,13 +90,16 @@ void level_up(){
             SYS_doVBlankProcess();
         }
 
-        // VDP_clearText(1, 5, DEBUG_TEXT_LEN + 6);
-
-        // VDP_drawText("Hello? ", 1, 7);
 
         clear_sprites();
 
         init_game_vars(); // Set up player/enemy scores
+
+        // Reset scroll positions
+        scroll_a_x = 0; scroll_a_y = 0;
+        scroll_b_x = 0; scroll_b_y = 0;
+        VDP_setHorizontalScroll(BG_B, scroll_b_x);
+        VDP_setVerticalScroll(BG_B, scroll_b_y);
 
         title_screen();   // Show title screen.
 
@@ -119,13 +112,22 @@ void level_up(){
         init_eBullets();
 
         // Create player sprite (player_x, player_y are from game_data.c)
-        player_sprite = SPR_addSprite(&player_sprite_res,
-                                    player_x, player_y,
-                                    TILE_ATTR(PAL1, TRUE, FALSE, FALSE));
+        // player_sprite = SPR_addSprite(&player_sprite_res,
+        //                             player_x, player_y,
+        //                             TILE_ATTR(PAL1, TRUE, FALSE, FALSE));
+
+
+        // Reset player
+        player_x = 144; player_y = 104;
+        player_vx = 0; player_vy = 0;
+        player_vx_applied = 0; player_vy_applied = 0;
+        player_x_remainder = 0; player_y_remainder = 0;
+        player_rotation_index = 0;
+
+        SPR_setVisibility(player_sprite, VISIBLE);
+
 
     }
-
-
 
 
     XGM2_play(track1);

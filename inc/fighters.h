@@ -6,5 +6,6 @@
 
 void initFighters(void);
 void updateFighters(void);
+void collideFighters(void);
 
 #endif // FIGHTERS_H

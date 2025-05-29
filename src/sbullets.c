@@ -71,7 +71,7 @@ void update_SBullets(){
     for (s16 i = 0; i < NSBULLET; i++) {
         if (sbullets[i].status >= 0) { // If bullet is active
             if (sbullets[i].new_bullet > 0){
-                sbullets[i].sprite_ptr = SPR_addSprite(&bullet_sprite_res,
+                sbullets[i].sprite_ptr = SPR_addSprite(&sbullet_sprite_res,
                                                 sbullets[i].x,
                                                 sbullets[i].y,
                                                 TILE_ATTR(PAL1, TRUE, FALSE, FALSE));
@@ -82,9 +82,9 @@ void update_SBullets(){
             for (u16 f = 0; f < active_fighter_count; f++) {
                 if (fighters[f].status >= 0){ // If fighter is active
                     // Simple AABB collision check (8x8 sprite assumed for fighter, 4x4 for bullet, adjust as needed)
-                    if (fighters[f].x     < sbullets[i].x + 2 && // fighter left < bullet right
+                    if (fighters[f].x     < sbullets[i].x + 4 && // fighter left < bullet right
                         fighters[f].x + 8 > sbullets[i].x     && // fighter right > bullet left
-                        fighters[f].y     < sbullets[i].y + 2 && // fighter top < bullet bottom
+                        fighters[f].y     < sbullets[i].y + 4 && // fighter top < bullet bottom
                         fighters[f].y + 8 > sbullets[i].y)       // fighter bottom > bullet top
                     {
                         sbullets[i].status = -1; // Deactivate bullet

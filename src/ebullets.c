@@ -66,7 +66,7 @@ void fire_eBullet(){
 					        ebullets[current_ebullet_index].x 			 = fighters[i].x;
 					        ebullets[current_ebullet_index].y 			 = fighters[i].y;
 
-            				XGM2_playPCMEx(sfx_elaser, sizeof(sfx_elaser), SOUND_PCM_CH_AUTO, 1, TRUE, FALSE);
+            				XGM2_playPCMEx(sfx_elaser, sizeof(sfx_elaser), SOUND_PCM_CH3, 1, TRUE, FALSE);
         					fighters[i].status += 1;
 
         					break;
@@ -118,10 +118,13 @@ void update_eBullets(){
                 if(ebullets[i].sprite_ptr) SPR_releaseSprite(ebullets[i].sprite_ptr);
                 ebullets[i].sprite_ptr = NULL;
 
-                fighters_score += 1; // Score one for the bad guys
-                
+                XGM2_playPCMEx(sfx_explode, sizeof(sfx_explode), SOUND_PCM_CH3, 4, TRUE, FALSE);
+
+                if (shield_status < 0){  // Check shield status
+                	fighters_score += 1; // Score one for the bad guys
+                }
+                               
                 // Potentially add explosion, score, sound effect here
-                // break; // Bullet can only hit one fighter per frame
             }
 
 

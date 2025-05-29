@@ -4,6 +4,7 @@
 #include "player.h"
 #include "bullets.h"    // For fireBullet()
 #include "sbullets.h"   // For fire_SBullet()
+#include "shield.h"     // Player Shield
 
 
 // --- Input Handling Function ---
@@ -44,17 +45,69 @@ void handleInput()
         player_thrust_delay_timer = 0;
     }
 
+    // Turn on Shield
+    if (value & BUTTON_Y) {
+        enableShield();
+    }
+    // if (new_shield_delay_timer == shield_delay_max - 1) {
+    //     XGM2_playPCMEx(sfx_ding, sizeof(sfx_ding), SOUND_PCM_CH2, 3, FALSE, FALSE); // Shield is ready.
+    // }
+    if ((new_shield_delay_timer < shield_delay_max) & (shield_status < 0)){
+        new_shield_delay_timer += 1;
+    } 
+
     // Fire main weapon
     if (value & BUTTON_B) {
-        fireBullet(); // Call fireBullet from bullets module
+        if (shield_status < 0){
+            fireBullet(); // Call fireBullet from bullets module.  Can only fire when shields down
+        }
+        
     }
     new_bullet_delay_timer += 1; // This is related to bullet firing rate
 
     // Fire secondary weapon
     if (value & BUTTON_C) {
-        fire_SBullet(); // Call fireBullet from bullets module
+        if (shield_status < 0){
+            fire_SBullet(); // Call fireBullet from bullets module. Can only fire when shields down
+        }
     }
     new_sbullet_delay_timer += 1; // This is related to bullet firing rate
+
+    if (value & BUTTON_A) { // Player boost.
+        if (player_boost_delay_timer >= player_boost_delay_timer_max){
+            player_boost_status = 1;
+            player_boost_delay_timer = 0;
+            player_boost_timer = 0;
+            XGM2_playPCMEx(sfx_turbo, sizeof(sfx_turbo), SOUND_PCM_CH2, 3, FALSE, FALSE);
+        } 
+    }
+}
+
+void playerBoost(){
+
+
+    if (player_boost_status > 0){
+
+        // VDP_clearText(1, 5, 15);
+        // intToStr(player_boost_timer, text_vel_x, 2);
+        // VDP_drawText("BST:", 1, 5); VDP_drawText(text_vel_x, 6, 5);
+
+        if (player_boost_timer < player_boost_timer_max){
+            player_vx = -sin_fix[player_rotation_index] * 5;
+            player_vy = -cos_fix[player_rotation_index] * 5;
+            player_boost_timer += 1;
+        } else {
+            player_boost_status = -1;
+        }
+
+    } // else {
+    //     VDP_clearText(1, 5, 15);
+    // }
+
+    if (player_boost_delay_timer < player_boost_delay_timer_max) {
+        player_boost_delay_timer += 1;
+    }
+        
 }
 
 // --- Physics Update Function ---

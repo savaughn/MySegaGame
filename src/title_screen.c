@@ -31,7 +31,7 @@ void title_screen(){
     // Start music
     XGM2_setLoopNumber(-1);
     XGM2_play(title_music);
-    XGM2_setFMVolume(60);
+    XGM2_setFMVolume(75);
 
     fcounter_l = 0;
     fcounter_r = 0;

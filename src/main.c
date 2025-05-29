@@ -10,6 +10,7 @@
 #include "game_level_screen.h" // Handles level-ups and Game over
 
 #include "player.h"
+#include "shield.h"     // Player Shield
 #include "bullets.h"
 #include "ebullets.h"
 #include "sbullets.h"
@@ -85,7 +86,7 @@ int main()
     // Start music
     XGM2_setLoopNumber(-1);
     XGM2_play(track1);
-    XGM2_setFMVolume(60);
+    XGM2_setFMVolume(75);
 
     VDP_setBackgroundColor(0); // first index from PAL0 
     SYS_enableInts();
@@ -94,7 +95,13 @@ int main()
     while (1)
     {
         handleInput();
+        playerBoost(); // Apply boost if needed.  Must be called before updatePhysics.
         updatePhysics();
+
+        collideFighters(); // Check for collision between player and fighters 
+
+        shield_animate();
+
         updateBullets();
         update_SBullets();
 
