@@ -59,9 +59,9 @@ void updateMine(){
 	if (mine_status > 1){ // If mine is armed, check for collisions
 
 		for (s16 i = 0; i < active_fighter_count; i++) {
-			if (fighters[i].x     < mine_x + 8 && // fighter left < bullet right
+			if (fighters[i].x     < mine_x + 16 && // fighter left < bullet right
                 fighters[i].x + 8 > mine_x     && // fighter right > bullet left
-                fighters[i].y     < mine_y + 8 && // fighter top < bullet bottom
+                fighters[i].y     < mine_y + 16 && // fighter top < bullet bottom
                 fighters[i].y + 8 > mine_y)       // fighter bottom > bullet top
             {
             	fighters[i].status = -9; // Deactivate fighter (-9 means we do an explosion)

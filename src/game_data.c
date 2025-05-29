@@ -107,7 +107,7 @@ s16 mine_status = -1; // Shield is off.
 s16 mine_x = 0;
 s16 mine_y = 0;
 u16 mine_timer      = 0;   // Time for mine to arm itself
-u16 mine_timer_max  = 120; // 120 -> 2 seconds to get away
+u16 mine_timer_max  = 30; // 120 -> 2 seconds to get away
 s16 mexplode_status = 0;
 Sprite* mine_sprite_ptr;
 Sprite* mexplode_sprite_ptr;

@@ -55,7 +55,7 @@ void fire_SBullet(){
 		        sbullets[i].bvyrem = 0;
 		    }
 
-		    // XGM2_playPCMEx(sfx_laser, sizeof(sfx_laser), SOUND_PCM_CH2, 1, TRUE, FALSE);
+		    XGM2_playPCMEx(sfx_sbullet, sizeof(sfx_sbullet), SOUND_PCM_CH2, 2, FALSE, FALSE);
 
 		}
 

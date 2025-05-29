@@ -43,6 +43,7 @@ WAV     sfx_explode				"explosion_decompression.wav" XGM2
 WAV     sfx_ding                "shield_ready.wav"			  XGM2
 WAV     sfx_turbo				"turbo_jet.wav"				  XGM2
 WAV     sfx_mexplode            "mexplode.wav"                XGM2
+WAV     sfx_sbullet 			"sbullet.wav"				  XGM2
 
 // Songs
 XGM2 	track1 					"UpBeat.vgm"	
