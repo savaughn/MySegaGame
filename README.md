@@ -1,0 +1,36 @@
+# Mega Super Fighter Challenge
+
+## Overview
+Dive into an epic space battle where you are the last hope against an overwhelming armada of alien ships. In "Mega Super Fighter Challenge," your mission is to destroy as many enemy ships as possible before they can obliterate you. The first player to reach 100 points triumphs in this high-intensity space shooter.
+
+## Gameplay
+- **Objective:** Destroy enemy ships and amass 100 points.
+- **Controls:**
+  - **Directional Pad (D-Pad):** Move your spaceship.
+  - **A Button:** Short boost of speed.
+  - **B Button:** Main gun (primary weapon).
+  - **C Button:** Spread gun (slow fire rate, additional firepower).
+  - **Y Button:** Raise shield for a short duration. Weapons cannot be fired while the shield is raised.
+- **Scoring:**
+  - Destroying basic enemy ships grants 10 points.
+  - Larger, tougher enemies award more points, up to 50 points for bosses.
+
+## Collision Rules
+If your spaceship crashes into an enemy ship, it counts as a point for the enemy unless your shields are raised. Raising your shield will protect you from taking damage during collisions but prevents you from firing any weapons while the shield is active.
+
+## Levels
+As you progress through levels, the difficulty increases. Enemy ships become faster and more numerous, requiring superior piloting skills and strategic shooting. The ultimate challenge awaits in later levels with powerful alien commanders that demand precision and quick reflexes.
+
+## Multiplayer Mode
+"Mega Super Fighter Challenge" supports two-player mode for competitive gameplay. Players can take turns or face off simultaneously, each striving to be the first to 100 points.
+
+## Game Over
+If your spaceship is destroyed or you run out of lives, the game ends. However, fear not! You can restart and continue your battle against the ever-growing hordes of enemies in hopes of achieving victory.
+
+## Technical Details
+- **Platform:** Sega Genesis
+- **Developer:** Jason Rowe
+- **Release Date:** Alpha - 2025-05-29
+---
+
+Feel free to customize this README further with additional details, images, or any other information you think is pertinent to your game!
