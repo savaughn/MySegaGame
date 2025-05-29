@@ -38,7 +38,7 @@
 
 // --- SBullet properties ---
 #define NSBULLET                3  // Only one spread-shot at a time
-#define NSBULLET_TIMER_MAX      60
+#define NSBULLET_TIMER_MAX      45
 
 // --- Fighter properties ---
 #define NFIGHTER_MAX            30

@@ -40,8 +40,8 @@ void handleInput()
         player_vy = -cos_fix[player_rotation_index];
         player_thrust_delay_timer = 0;
     } else if (value & BUTTON_DOWN) {
-        player_vx =  sin_fix[player_rotation_index];
-        player_vy =  cos_fix[player_rotation_index];
+        player_vx =  sin_fix[player_rotation_index] / 2; // should replace with lookup to avoid division
+        player_vy =  cos_fix[player_rotation_index] / 2; 
         player_thrust_delay_timer = 0;
     }
 
