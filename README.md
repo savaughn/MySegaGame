@@ -13,8 +13,8 @@ Dive into an epic space battle where you are the last hope against an overwhelmi
   - **A Button:** Short boost of speed.
   - **B Button:** Main gun (primary weapon).
   - **C Button:** Spread gun (slow fire rate, additional firepower).
-  - **Y Button:** Raise shield for a short duration. Weapons cannot be fired while the shield is raised.
-  - **X Button:** Place a mine that arms itself after 0.5 seconds. If you collide with your own mine, you lose 10 points.
+  - **X Button:** Raise shield for a short duration. Weapons cannot be fired while the shield is raised.
+  - **Y Button:** Place a mine that arms itself after 0.5 seconds. If you collide with your own mine, you lose 10 points.
 - **Scoring:**
   - Destroying basic enemy ships grants 1 points.
   - Larger, tougher enemies award more points.
