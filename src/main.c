@@ -128,25 +128,25 @@ int main()
 
         // --- Draw Player Score ---
         if (player_score != player_score_old ){
-            VDP_clearText(1, 1, 10);
+            VDP_clearText(1, 1, 11);
             intToStr(player_score, text_vel_x, 5); // Using player_x from globals
-            VDP_drawText("You:", 1, 1); VDP_drawText(text_vel_x, 6, 1);
+            VDP_drawText("You:", 1, 1); VDP_drawText(text_vel_x, 7, 1);
             player_score_old = player_score;
         }
 
         // --- Draw Player Score ---
         if (fighters_score != fighters_score_old ){
-            VDP_clearText(28, 1, 13);
+            VDP_clearText(26, 1, 13);
             intToStr(fighters_score, text_vel_x, 5); // Using player_x from globals
-            VDP_drawText(":Enemy", 34, 1); VDP_drawText(text_vel_x, 28, 1);
+            VDP_drawText(":Enemy", 33, 1); VDP_drawText(text_vel_x, 26, 1);
             fighters_score_old = fighters_score;
         }
 
         // --- Draw Level Indicator ---
         if (game_level != game_level_old ){
-            VDP_clearText(16, 1, 8);
+            VDP_clearText(15, 1, 8);
             intToStr(game_level, text_vel_x, 2); // Using player_x from globals
-            VDP_drawText("Level", 16, 1); VDP_drawText(text_vel_x, 22, 1);
+            VDP_drawText("Level", 15, 1); VDP_drawText(text_vel_x, 21, 1);
             game_level_old = game_level;
         }
 
