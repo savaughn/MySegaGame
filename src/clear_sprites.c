@@ -41,6 +41,10 @@ void clear_sprites(){
         sbullets[i].sprite_ptr = NULL;
     }
 
+    // Clear mines
+    if(mine_sprite_ptr) SPR_releaseSprite(mine_sprite_ptr);
+    if (mexplode_sprite_ptr) SPR_releaseSprite(mexplode_sprite_ptr);
+
     // if(player_sprite != NULL) SPR_releaseSprite(player_sprite);
     // player_sprite = NULL;
     SPR_setVisibility(player_sprite, HIDDEN);

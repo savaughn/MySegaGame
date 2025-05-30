@@ -94,6 +94,8 @@ void update_SBullets(){
                         fighters[f].status = -9; // Deactivate fighter (-8 means we do an explosion)
                         if(fighters[f].sprite_ptr) SPR_releaseSprite(fighters[f].sprite_ptr);
                         fighters[f].sprite_ptr = NULL;
+
+                        player_score +=1;
                         
                         // Potentially add explosion, score, sound effect here
                         break; // Bullet can only hit one fighter per frame

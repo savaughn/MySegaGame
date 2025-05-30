@@ -41,7 +41,7 @@ void level_up(){
     }
     else {
         // VDP_drawText(" You Lose ", 15, 13);  // This is the game-over part...
-        VDP_drawText(" Game  Over", 15, 13);  // This is the game-over part...
+        VDP_drawText(" Game Over", 15, 13);  // This is the game-over part...
 
         // Once we have a proper game loop the next 4 lines can probably be removed.
         player_score = 0;
@@ -52,7 +52,7 @@ void level_up(){
         game_over = 1;
     }
 
-    VDP_drawText("Push Start", 15, 14);
+    VDP_drawText("Push  Start", 15, 14);
     while(1){
         
         value = JOY_readJoypad(JOY_1);

@@ -160,16 +160,6 @@ void updateFighters()
                 fexplode[i].status = 5;
             } else if ((fighters[i].status == -2) & (fexplode[i].status == 0)){
                 SPR_releaseSprite(fexplode[i].sprite_ptr);
-                // SPR_setVisibility(fexplode[i].sprite_ptr, HIDDEN);
-
-                // Add fighter back to pool.
-                // fighters[i].x = (random() % (MAPSIZEM1 - screen_width_pixels)) + screen_width_pixels + 1; // World coordinates
-                // fighters[i].y = (random() % (MAPSIZEM1 - screen_height_pixels)) + screen_height_pixels + 1;
-
-                // if (fighters[i].x > MAPSIZED2) fighters[i].x -= MAPSIZE;
-                // if (fighters[i].x < MMAPSIZED2) fighters[i].x += MAPSIZE; // Ensure positive if wrapped
-                // if (fighters[i].y > MAPSIZED2) fighters[i].y -= MAPSIZE;
-                // if (fighters[i].y < MMAPSIZED2) fighters[i].y += MAPSIZE;
 
                 // fighters[i].x = (random() % (MAPSIZED2 - screen_width_pixels)) + screen_width_pixels + 144;
                 // fighters[i].y = (random() % (MAPSIZED2 - screen_height_pixels)) + screen_height_pixels + 104;
@@ -189,7 +179,17 @@ void updateFighters()
                 fexplode[i].status = 5;
             }
             if (fexplode[i].status > 0){
-                SPR_setPosition(fexplode[i].sprite_ptr, fighters[i].x, fighters[i].y);
+
+                // Check if fighter is on screen before drawing
+                if (fighters[i].x > -8 && fighters[i].x < screen_width_pixels &&
+                    fighters[i].y > -8 && fighters[i].y < screen_height_pixels) {
+                    SPR_setPosition(fexplode[i].sprite_ptr, fighters[i].x, fighters[i].y);
+                    SPR_setVisibility(fexplode[i].sprite_ptr, VISIBLE);
+                } else {
+                    SPR_setVisibility(fexplode[i].sprite_ptr, HIDDEN); // Hide if off-screen
+                }
+
+                // SPR_setPosition(fexplode[i].sprite_ptr, fighters[i].x, fighters[i].y);
                 fexplode[i].status -= 1;
             }
             if (fexplode[i].status == 0){

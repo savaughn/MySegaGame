@@ -103,7 +103,7 @@ u16 player_boost_delay_timer_max = 60; // How often the player can boost
 s16 player_boost_status = -1; // If boost is enabled
 
 // Space Mines
-s16 mine_status = -1; // Shield is off.
+s16 mine_status = 0; // Shield is off.
 s16 mine_x = 0;
 s16 mine_y = 0;
 u16 mine_timer      = 0;   // Time for mine to arm itself
