@@ -160,6 +160,7 @@ void updateFighters()
                 fexplode[i].status = 5;
             } else if ((fighters[i].status == -2) & (fexplode[i].status == 0)){
                 SPR_releaseSprite(fexplode[i].sprite_ptr);
+                fexplode[i].sprite_ptr = NULL;
 
                 // fighters[i].x = (random() % (MAPSIZED2 - screen_width_pixels)) + screen_width_pixels + 144;
                 // fighters[i].y = (random() % (MAPSIZED2 - screen_height_pixels)) + screen_height_pixels + 104;
@@ -176,8 +177,9 @@ void updateFighters()
                 fighters[i].new_fighter = 1;
             } else if (fexplode[i].status == 0) {
                 SPR_setFrame(fexplode[i].sprite_ptr, fighters[i].status + 9);
-                fexplode[i].status = 5;
+                fexplode[i].status = 5; // delay for next frame of animation
             }
+
             if (fexplode[i].status > 0){
 
                 // Check if fighter is on screen before drawing
@@ -192,6 +194,7 @@ void updateFighters()
                 // SPR_setPosition(fexplode[i].sprite_ptr, fighters[i].x, fighters[i].y);
                 fexplode[i].status -= 1;
             }
+
             if (fexplode[i].status == 0){
                 fighters[i].status += 1;
             }

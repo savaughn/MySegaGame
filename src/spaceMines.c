@@ -24,6 +24,11 @@ void updateMine(){
 		mine_x += -player_scroll_delta_x; // Adjust for map scroll
 	    mine_y += -player_scroll_delta_y; // Adjust for map scroll
 
+	    if (mine_x >  MAPSIZED2) mine_x -= MAPSIZE;
+        if (mine_x < MMAPSIZED2) mine_x += MAPSIZE; // Ensure positive if wrapped
+        if (mine_y >  MAPSIZED2) mine_y -= MAPSIZE;
+        if (mine_y < MMAPSIZED2) mine_y += MAPSIZE;
+
 
 	    if (mine_x > -8 && mine_x < screen_width_pixels &&
             mine_y > -8 && mine_y < screen_height_pixels) {
@@ -35,15 +40,21 @@ void updateMine(){
 	    
 	    if (mine_timer < mine_timer_max){
 	    	mine_timer += 1;
-	    } else {
+	    } else if (mine_timer == mine_timer_max) {
 	    	mine_status = 2; // Arm the space mine
 	    	SPR_setFrame(mine_sprite_ptr, 1);
+	    	mine_timer = mine_timer_max + 1;
 	    }
 
 	} else if (mine_status < -1){
 
 		mine_x += -player_scroll_delta_x; // Adjust for map scroll
 	    mine_y += -player_scroll_delta_y; // Adjust for map scroll
+
+	    if (mine_x >  MAPSIZED2) mine_x -= MAPSIZE;
+        if (mine_x < MMAPSIZED2) mine_x += MAPSIZE; // Ensure positive if wrapped
+        if (mine_y >  MAPSIZED2) mine_y -= MAPSIZE;
+        if (mine_y < MMAPSIZED2) mine_y += MAPSIZE;
 
 	    if ((mine_status == -9) & (mexplode_status == 0)){
 	    	
@@ -55,6 +66,7 @@ void updateMine(){
 	    } else if ((mine_status == -2) & (mexplode_status == 0)){ // Remove sprite
             
             SPR_releaseSprite(mexplode_sprite_ptr);
+            mexplode_sprite_ptr = NULL;
             mine_status = -1;
         
         } else if (mexplode_status == 0) {  // Advance frame
@@ -111,6 +123,7 @@ void updateMine(){
             mine_y + 8 > player_y)       // fighter bottom > bullet top
         {
         	mine_status = -9; // Deactivate mine (-9 means we do an explosion)
+        	mexplode_status = 0;
             if(mine_sprite_ptr) SPR_releaseSprite(mine_sprite_ptr);
             mine_sprite_ptr = NULL;
             player_score -= 10;
