@@ -44,6 +44,7 @@ void clear_sprites(){
     // Clear mines
     if(mine_sprite_ptr) SPR_releaseSprite(mine_sprite_ptr);
     if (mexplode_sprite_ptr) SPR_releaseSprite(mexplode_sprite_ptr);
+    mine_status = 0;
 
     // if(player_sprite != NULL) SPR_releaseSprite(player_sprite);
     // player_sprite = NULL;
