@@ -46,17 +46,6 @@ void handleInput()
         player_thrust_delay_timer = 0;
     }
 
-    // Turn on Shield
-    if (value & BUTTON_Y) {
-        enableShield();
-    }
-    // if (new_shield_delay_timer == shield_delay_max - 1) {
-    //     XGM2_playPCMEx(sfx_ding, sizeof(sfx_ding), SOUND_PCM_CH2, 3, FALSE, FALSE); // Shield is ready.
-    // }
-    if ((new_shield_delay_timer < shield_delay_max) & (shield_status < 0)){
-        new_shield_delay_timer += 1;
-    } 
-
     // Fire main weapon
     if (value & BUTTON_B) {
         if (shield_status < 0){
@@ -83,8 +72,19 @@ void handleInput()
         } 
     }
 
+    // Turn on Shield
+    if (value & BUTTON_X) {
+        enableShield();
+    }
+    // if (new_shield_delay_timer == shield_delay_max - 1) {
+    //     XGM2_playPCMEx(sfx_ding, sizeof(sfx_ding), SOUND_PCM_CH2, 3, FALSE, FALSE); // Shield is ready.
+    // }
+    if ((new_shield_delay_timer < shield_delay_max) & (shield_status < 0)){
+        new_shield_delay_timer += 1;
+    } 
+
     // Drop a mine
-    if (value & BUTTON_X){
+    if (value & BUTTON_Y){
         placeMine();
     }
 
