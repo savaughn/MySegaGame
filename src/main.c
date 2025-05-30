@@ -8,6 +8,7 @@
 
 #include "title_screen.h"      // Title screen --> setting game options
 #include "game_level_screen.h" // Handles level-ups and Game over
+#include "hud.h"               // HUD, including score
 
 #include "player.h"
 #include "shield.h"     // Player Shield
@@ -72,6 +73,7 @@ int main()
     title_screen();   // Show title screen.
 
     initBackground(); // Initializes tiles, maps, and initial scroll
+    initHud();        // Load tiles for HUD
 
     // Initialize game entities
     initBullets();
@@ -117,6 +119,8 @@ int main()
         SPR_setPosition(player_sprite, player_x, player_y);
 
 
+        drawHud();
+
         // // --- Draw Debug Text ---
         // VDP_clearText(1, 1, DEBUG_TEXT_LEN + 6);
         // VDP_clearText(1, 2, DEBUG_TEXT_LEN + 6);
@@ -125,30 +129,6 @@ int main()
         // VDP_drawText("PosX:", 1, 1); VDP_drawText(text_vel_x, 7, 1);
         // VDP_drawText("PosY:", 1, 2); VDP_drawText(text_vel_y, 7, 2);
         // // char nfs[5]; intToStr(active_fighter_count, nfs, 0); VDP_drawText(nfs, 1, 3); // Example
-
-        // --- Draw Player Score ---
-        if (player_score != player_score_old ){
-            VDP_clearText(1, 1, 11);
-            intToStr(player_score, text_vel_x, 5); // Using player_x from globals
-            VDP_drawText("You:", 1, 1); VDP_drawText(text_vel_x, 7, 1);
-            player_score_old = player_score;
-        }
-
-        // --- Draw Player Score ---
-        if (fighters_score != fighters_score_old ){
-            VDP_clearText(26, 1, 13);
-            intToStr(fighters_score, text_vel_x, 5); // Using player_x from globals
-            VDP_drawText(":Enemy", 33, 1); VDP_drawText(text_vel_x, 26, 1);
-            fighters_score_old = fighters_score;
-        }
-
-        // --- Draw Level Indicator ---
-        if (game_level != game_level_old ){
-            VDP_clearText(15, 1, 8);
-            intToStr(game_level, text_vel_x, 2); // Using player_x from globals
-            VDP_drawText("Level", 15, 1); VDP_drawText(text_vel_x, 21, 1);
-            game_level_old = game_level;
-        }
 
         // --- Debug for fighter positions --- //
         // VDP_clearText(1, 2, 15);
@@ -162,7 +142,7 @@ int main()
         // intToStr(npos, text_vel_x, 5);
         // VDP_drawText("FGX:", 1, 2); VDP_drawText(text_vel_x, 6, 2);
 
-        if ((fighters_score > score_to_win) | (player_score > score_to_win)){
+        if ((fighters_score >= score_to_win) | (player_score >= score_to_win)){
             level_up();
         }
         

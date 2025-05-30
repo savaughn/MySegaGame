@@ -44,6 +44,10 @@
 #define NFIGHTER_MAX            30
 #define FIGHTER_RATE            128 // Rate at which Fighters regenerate (currently unused but good to keep)
 
+// --- HUD properties ---
+#define BAR_WIDTH_TILES 8
+#define STRIPS_PER_TILE 8
+
 // --- Debug Text ---
 #define DEBUG_TEXT_LEN          16
 

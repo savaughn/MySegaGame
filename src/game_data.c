@@ -81,9 +81,14 @@ s16 player_score = 0;
 s16 player_score_old = 1;
 u16 fighters_score = 0;
 u16 fighters_score_old = 1;
-u16 score_to_win = 10;
 u16 game_level = 1;
 u16 game_level_old = 1;
+u16 score_to_win = 100;
+u16 game_score = 0;
+
+// HUD
+u16 player_tiles;
+
 
 // Shield
 u16 new_shield_delay_timer = 0;

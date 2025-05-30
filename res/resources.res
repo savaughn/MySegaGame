@@ -9,6 +9,10 @@
 // PALETTE bg_near_palette     "near_stars_tiles.png"
 // TILESET bg_near_tiles       "near_stars_tiles.png" NONE
 
+
+// Tiles for HUD
+TILESET	player_score_tiles		"Scorebar.png"		NONE
+
 // Image for background
 IMAGE 	starbg 			        "Star_Map.png" 		BEST 
 IMAGE   title 					"Title_screen.png"	BEST

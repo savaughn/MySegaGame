@@ -32,11 +32,11 @@ void level_up(){
             efire_cooldown_timer = 4;
         }
 
-        // player_score = 0;
-        // player_score_old = 1;
-        // fighters_score = 0;
-        // fighters_score_old = 1;
-        score_to_win += 100;
+        player_score = 0;
+        player_score_old = 1;
+        fighters_score = 0;
+        fighters_score_old = 1;
+        score_to_win += 100; 
 
     }
     else {

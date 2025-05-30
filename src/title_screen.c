@@ -142,7 +142,7 @@ void init_game_vars(){
     player_score_old = 1;
     fighters_score = 0;
     fighters_score_old = 1;
-    score_to_win = 100;
     game_level = 1;
     game_level_old = 0;
+    score_to_win = 100;
 }
