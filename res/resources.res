@@ -12,6 +12,7 @@
 
 // Tiles for HUD
 TILESET	player_score_tiles		"Scorebar.png"		NONE
+// TILESET	player_score_red_tiles	"Scorebar_red.png"	NONE
 
 // Image for background
 IMAGE 	starbg 			        "Star_Map.png" 		BEST 

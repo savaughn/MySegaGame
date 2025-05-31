@@ -141,6 +141,8 @@ extern u16 game_score_old;
 
 // HUD
 extern u16 player_tiles;
+// extern u16 player_tiles_red;
+extern u16 coffset;
 extern u16 STRIP_TILE_8_IDX;
 extern u16 EMPTY_BAR_TILE_IDX;
 

@@ -89,6 +89,8 @@ u16 game_score_old = 1;
 
 // HUD
 u16 player_tiles;
+// u16 player_tiles_red;
+u16 coffset;
 u16 STRIP_TILE_8_IDX;
 u16 EMPTY_BAR_TILE_IDX;
 

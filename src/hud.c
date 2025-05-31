@@ -23,20 +23,21 @@ void drawHud(){
 
 	    u16 tile_index_to_draw;
 	    
-	    u16 coffset = 0;
-	    // if (player_score > 90){
-	    // 	coffset = 8;
-	    // }
+	    if (player_score > 90){
+	    	coffset = 9;
+	    } else {
+	    	coffset = 0;
+	    }
 
 	    for (u16 i = 0; i < BAR_WIDTH_TILES; ++i) {
 	        if (i < num_full_tiles) {
 	            // This tile is completely full
-	            tile_index_to_draw = STRIP_TILE_8_IDX + coffset;
+	            tile_index_to_draw = STRIP_TILE_8_IDX;
 	        } else if (i == num_full_tiles) {
 	            // This is the tile that might be partially filled, or empty if strips_in_next_tile is 0
 	            // EMPTY_BAR_TILE_IDX + 0 is the empty tile
 	            // EMPTY_BAR_TILE_IDX + 1 is the 1-strip tile, ..., EMPTY_BAR_TILE_IDX + 8 is the 8-strip tile
-	            tile_index_to_draw = EMPTY_BAR_TILE_IDX + strips_in_next_tile + coffset;
+	            tile_index_to_draw = EMPTY_BAR_TILE_IDX + strips_in_next_tile;
 	        } else {
 	            // This tile is beyond the filled portion, so it's empty
 	            tile_index_to_draw = EMPTY_BAR_TILE_IDX;
@@ -44,6 +45,7 @@ void drawHud(){
 	        // VDP_setTileMapData(WINDOW, TILE_ATTR_FULL(pal, FALSE, FALSE, FALSE, tile_index_to_draw),
 	        //                    start_x + i, start_y, DMA_QUEUE);
 
+	        tile_index_to_draw += coffset;
 	        VDP_setTileMapXY(BG_A,TILE_ATTR_FULL(PAL3,0,FALSE,FALSE,tile_index_to_draw),8+i,1);
 	    }
 
@@ -73,20 +75,21 @@ void drawHud(){
 
 	    u16 tile_index_to_draw;
 
-	    u16 coffset = 0;
-	    // if (fighters_score > 90){
-	    // 	coffset = 8;
-	    // }
+	    if (fighters_score > 90){
+	    	coffset = 9;
+	    } else {
+	    	coffset = 0;
+	    }
 
 	    for (u16 i = 0; i < BAR_WIDTH_TILES; ++i) {
 	        if (i < num_full_tiles) {
 	            // This tile is completely full
-	            tile_index_to_draw = STRIP_TILE_8_IDX + coffset;
+	            tile_index_to_draw = STRIP_TILE_8_IDX;
 	        } else if (i == num_full_tiles) {
 	            // This is the tile that might be partially filled, or empty if strips_in_next_tile is 0
 	            // EMPTY_BAR_TILE_IDX + 0 is the empty tile
 	            // EMPTY_BAR_TILE_IDX + 1 is the 1-strip tile, ..., EMPTY_BAR_TILE_IDX + 8 is the 8-strip tile
-	            tile_index_to_draw = EMPTY_BAR_TILE_IDX + strips_in_next_tile + coffset;
+	            tile_index_to_draw = EMPTY_BAR_TILE_IDX + strips_in_next_tile;
 	        } else {
 	            // This tile is beyond the filled portion, so it's empty
 	            tile_index_to_draw = EMPTY_BAR_TILE_IDX;
@@ -94,6 +97,8 @@ void drawHud(){
 	        // VDP_setTileMapData(WINDOW, TILE_ATTR_FULL(pal, FALSE, FALSE, FALSE, tile_index_to_draw),
 	        //                    start_x + i, start_y, DMA_QUEUE);
 
+
+	        tile_index_to_draw += coffset;
 	        VDP_setTileMapXY(BG_A,TILE_ATTR_FULL(PAL3,0,FALSE,TRUE,tile_index_to_draw),30-i,1);
 	    }
 
@@ -123,8 +128,14 @@ void drawHud(){
 
 void initHud(){
 
-	player_tiles = VDP_loadTileSet(&player_score_tiles, 1, DMA_QUEUE);
+	// player_tiles     = VDP_loadTileSet(&player_score_tiles, 1, DMA);
+	// player_tiles_red = VDP_loadTileSet(&player_score_red_tiles, 1, DMA);
+
+	player_tiles = ind;
+	VDP_loadTileData(player_score_tiles.tiles, player_tiles, 18, DMA);
+
 	STRIP_TILE_8_IDX   = player_tiles + 8;
 	EMPTY_BAR_TILE_IDX = player_tiles;
+	coffset = 0;
 
 }

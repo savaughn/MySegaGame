@@ -18,6 +18,7 @@ void initBackground(void) {
     // New background
     PAL_setPalette(PAL0, star_bg_pal.data, DMA_QUEUE);
     VDP_drawImageEx(BG_B, &starbg, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, ind), 0, 0, FALSE, TRUE);
+    ind += starbg.tileset -> numTile;
 }
 
 // --- Update Scrolling Function ---
