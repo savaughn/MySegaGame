@@ -224,7 +224,7 @@ void collideFighters(){
 
                 if(shield_status <= 0){
                     fighters_score += 1; // If shield down, enemy gets a point
-                    XGM2_playPCMEx(sfx_explode, sizeof(sfx_explode), SOUND_PCM_CH3, 4, TRUE, FALSE);
+                    XGM2_playPCMEx(sfx_explode, sizeof(sfx_explode), SOUND_PCM_CH2, 4, TRUE, FALSE);
                 } else {
                     player_score += 1;   // If shield is up, player gets a point
                     game_score += 5;
