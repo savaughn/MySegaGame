@@ -106,9 +106,9 @@ void drawHud(){
 
     // --- Draw Level Indicator ---
     if (game_level != game_level_old ){
-        VDP_clearText(16, 2, 7);
-        intToStr(game_level, text_vel_x, 2); // Using player_x from globals
-        VDP_drawText("Level", 16, 2); VDP_drawText(text_vel_x, 21, 2);
+        VDP_clearText(15, 2, 9);
+        intToStr(game_level, text_vel_x, 3); // Using player_x from globals
+        VDP_drawText("Level ", 15, 2); VDP_drawText(text_vel_x, 21, 2);
         game_level_old = game_level;
     }
 
