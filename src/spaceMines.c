@@ -98,26 +98,32 @@ void updateMine(){
 	if (mine_status > 1){ // If mine is armed, check for collisions
 
 		for (s16 i = 0; i < active_fighter_count; i++) {
-			if (fighters[i].x     < mine_x + 16 && // fighter left < bullet right
-                fighters[i].x + 8 > mine_x     && // fighter right > bullet left
-                fighters[i].y     < mine_y + 16 && // fighter top < bullet bottom
-                fighters[i].y + 8 > mine_y)       // fighter bottom > bullet top
-            {
-            	fighters[i].status = -9; // Deactivate fighter (-9 means we do an explosion)
-                if(fighters[i].sprite_ptr) SPR_releaseSprite(fighters[i].sprite_ptr);
-                fighters[i].sprite_ptr = NULL;
 
-            	mine_status = -9; // Deactivate mine (-9 means we do an explosion)
-            	mexplode_status = 0;
-	            if(mine_sprite_ptr) SPR_releaseSprite(mine_sprite_ptr);
-	            mine_sprite_ptr = NULL;
-	            player_score += 5;
-	            if (player_score > 100){
-	            	player_score = 100;
+			if (fighters[i].status >= 0) { // only explode alive fighters
+
+				if (fighters[i].x     < mine_x + 16 && // fighter left < bullet right
+	                fighters[i].x + 8 > mine_x     && // fighter right > bullet left
+	                fighters[i].y     < mine_y + 16 && // fighter top < bullet bottom
+	                fighters[i].y + 8 > mine_y)       // fighter bottom > bullet top
+	            {
+	            	fighters[i].status = -9; // Deactivate fighter (-9 means we do an explosion)
+	                if(fighters[i].sprite_ptr) SPR_releaseSprite(fighters[i].sprite_ptr);
+	                fighters[i].sprite_ptr = NULL;
+
+	            	mine_status = -9; // Deactivate mine (-9 means we do an explosion)
+	            	mexplode_status = 0;
+		            if(mine_sprite_ptr) SPR_releaseSprite(mine_sprite_ptr);
+		            mine_sprite_ptr = NULL;
+		            player_score += 5;
+		            if (player_score > 100){
+		            	player_score = 100;
+		            }
+		            game_score += 10;
+		            XGM2_playPCMEx(sfx_mexplode, sizeof(sfx_mexplode), SOUND_PCM_CH3, 4, FALSE, FALSE);
+
+		            break; // Once an explosion happens, stop loop.
 	            }
-	            game_score += 10;
-	            XGM2_playPCMEx(sfx_mexplode, sizeof(sfx_mexplode), SOUND_PCM_CH3, 4, FALSE, FALSE);
-            }
+	        }
 
 		}
 
