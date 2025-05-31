@@ -97,7 +97,7 @@ void update_SBullets(){
                         XGM2_playPCMEx(sfx_explode, sizeof(sfx_explode), SOUND_PCM_CH3, 4, FALSE, FALSE);
 
                         player_score +=1;
-                        game_score +=2;
+                        game_score +=7;
                         
                         // Potentially add explosion, score, sound effect here
                         break; // Bullet can only hit one fighter per frame

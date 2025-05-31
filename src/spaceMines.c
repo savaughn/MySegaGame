@@ -118,7 +118,7 @@ void updateMine(){
 		            if (player_score > 100){
 		            	player_score = 100;
 		            }
-		            game_score += 10;
+		            game_score += 20;
 		            XGM2_playPCMEx(sfx_mexplode, sizeof(sfx_mexplode), SOUND_PCM_CH3, 4, FALSE, FALSE);
 
 		            break; // Once an explosion happens, stop loop.

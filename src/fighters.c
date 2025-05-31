@@ -88,8 +88,10 @@ void updateFighters()
 
             // AI / Movement decision (every 30 game frames)
             if (game_nframe == 30){ // Use game_nframe
-                fighters[i].nframe_fighter = (fighters[i].nframe_fighter + 1) % 2; // Animation
-                if(fighters[i].sprite_ptr) SPR_setFrame(fighters[i].sprite_ptr, fighters[i].nframe_fighter);
+
+                // Turn off fighter animation.  Not noticable anyways.  
+                // fighters[i].nframe_fighter = (fighters[i].nframe_fighter + 1) % 2; // Animation
+                // if(fighters[i].sprite_ptr) SPR_setFrame(fighters[i].sprite_ptr, fighters[i].nframe_fighter);
 
                 // Basic AI: randomly change direction towards player
                 s16 fdx_to_player = player_x - fighters[i].x; // Delta from fighter to player
@@ -227,7 +229,7 @@ void collideFighters(){
                     XGM2_playPCMEx(sfx_explode, sizeof(sfx_explode), SOUND_PCM_CH2, 4, TRUE, FALSE);
                 } else {
                     player_score += 1;   // If shield is up, player gets a point
-                    game_score += 5;
+                    game_score += 25;
                     XGM2_playPCMEx(sfx_explode, sizeof(sfx_explode), SOUND_PCM_CH3, 4, FALSE, FALSE);
                 }
 
