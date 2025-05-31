@@ -112,6 +112,7 @@ void updateMine(){
 	            if(mine_sprite_ptr) SPR_releaseSprite(mine_sprite_ptr);
 	            mine_sprite_ptr = NULL;
 	            player_score += 1;
+	            game_score += 10;
 	            XGM2_playPCMEx(sfx_mexplode, sizeof(sfx_mexplode), SOUND_PCM_CH3, 4, FALSE, FALSE);
             }
 

@@ -96,6 +96,7 @@ void update_SBullets(){
                         fighters[f].sprite_ptr = NULL;
 
                         player_score +=1;
+                        game_score +=2;
                         
                         // Potentially add explosion, score, sound effect here
                         break; // Bullet can only hit one fighter per frame

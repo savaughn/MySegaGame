@@ -137,9 +137,13 @@ extern u16 score_to_win;
 extern u16 game_level;
 extern u16 game_level_old;
 extern u16 game_score;
+extern u16 game_score_old;
 
 // HUD
 extern u16 player_tiles;
+extern u16 STRIP_TILE_8_IDX;
+extern u16 EMPTY_BAR_TILE_IDX;
+
 
 // Ship Shield
 extern u16 new_shield_delay_timer;

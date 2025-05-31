@@ -36,7 +36,7 @@ void level_up(){
         player_score_old = 1;
         fighters_score = 0;
         fighters_score_old = 1;
-        score_to_win += 100; 
+        score_to_win = 100; 
 
     }
     else {
@@ -103,6 +103,8 @@ void level_up(){
 
         title_screen();   // Show title screen.
 
+        PAL_setPalette(PAL3, title_pal_1.data, DMA_QUEUE); // Reset PAL3 after title 
+
         initBackground(); // Initializes tiles, maps, and initial scroll
 
         // Initialize game entities
@@ -125,6 +127,8 @@ void level_up(){
         player_rotation_index = 0;
 
         SPR_setVisibility(player_sprite, VISIBLE);
+
+        game_score = 0;
 
 
     }

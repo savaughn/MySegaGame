@@ -72,6 +72,8 @@ int main()
 
     title_screen();   // Show title screen.
 
+    PAL_setPalette(PAL3, title_pal_1.data, DMA_QUEUE); // reset PAL3 after title
+
     initBackground(); // Initializes tiles, maps, and initial scroll
     initHud();        // Load tiles for HUD
 
