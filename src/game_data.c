@@ -75,6 +75,7 @@ s16 game_nframe = 0;
 
 // Backgrounds
 u16 ind = TILE_USER_INDEX;
+u16 ind_sc = 0;
 
 // Score
 s16 player_score = 0;

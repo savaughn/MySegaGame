@@ -127,6 +127,7 @@ extern s16 game_nframe; // Renamed nframe to be more specific
 
 // Loading background map
 extern u16 ind;
+extern u16 ind_sc; // for score tiles
 
 // Scores and Levels
 extern s16 player_score;

@@ -12,6 +12,7 @@
 
 #include "title_screen.h"
 #include "background.h"
+#include "hud.h"
 
 void level_up(){
 
@@ -101,11 +102,16 @@ void level_up(){
         VDP_setHorizontalScroll(BG_B, scroll_b_x);
         VDP_setVerticalScroll(BG_B, scroll_b_y);
 
+
+        VDP_clearText(8,  1, 8);
+        VDP_clearText(23, 1, 8);
+
         title_screen();   // Show title screen.
 
         PAL_setPalette(PAL3, title_pal_1.data, DMA_QUEUE); // Reset PAL3 after title 
 
         initBackground(); // Initializes tiles, maps, and initial scroll
+        initHud();
 
         // Initialize game entities
         initBullets();

@@ -131,7 +131,7 @@ void initHud(){
 	// player_tiles     = VDP_loadTileSet(&player_score_tiles, 1, DMA);
 	// player_tiles_red = VDP_loadTileSet(&player_score_red_tiles, 1, DMA);
 
-	player_tiles = ind;
+	player_tiles = ind_sc;
 	VDP_loadTileData(player_score_tiles.tiles, player_tiles, 18, DMA);
 
 	STRIP_TILE_8_IDX   = player_tiles + 8;
