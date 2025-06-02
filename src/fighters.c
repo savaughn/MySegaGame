@@ -88,21 +88,23 @@ void updateFighters()
 
             // AI / Movement decision (every 30 game frames)
             if (game_nframe == 30){ // Use game_nframe
+            // game_ai_rand = random() % game_ai_decision_time;
+            // if (game_ai_rand == game_ai_decision){
 
                 // Turn off fighter animation.  Not noticable anyways.  
-                // fighters[i].nframe_fighter = (fighters[i].nframe_fighter + 1) % 2; // Animation
+                // fighters[i].nframe_fighter = (fighters[i].nframe_fighter + 1) % 4; // Animation
                 // if(fighters[i].sprite_ptr) SPR_setFrame(fighters[i].sprite_ptr, fighters[i].nframe_fighter);
 
                 // Basic AI: randomly change direction towards player
                 s16 fdx_to_player = player_x - fighters[i].x; // Delta from fighter to player
                 s16 fdy_to_player = player_y - fighters[i].y;
 
-                if (random() > 20000){ // Chance to adjust X velocity
+                if (random() > game_ai_decision){ // Chance to adjust X velocity
                     if (fdx_to_player > 0) fighters[i].vx = fighters[i].vxi; // Move right
                     else if (fdx_to_player < 0) fighters[i].vx = -fighters[i].vxi; // Move left
                     else fighters[i].vx = 0;
                 }
-                if (random() > 20000){ // Chance to adjust Y velocity
+                if (random() > game_ai_decision){ // Chance to adjust Y velocity
                     if (fdy_to_player > 0) fighters[i].vy = fighters[i].vyi; // Move down
                     else if (fdy_to_player < 0) fighters[i].vy = -fighters[i].vyi; // Move up
                     else fighters[i].vy = 0;
@@ -110,10 +112,10 @@ void updateFighters()
             }
 
             // Apply fighter's own velocity (sub-pixel)
-            fvx_applied = (fighters[i].vx + fighters[i].xrem) >> 8; // >>8 for 256 scale
-            fvy_applied = (fighters[i].vy + fighters[i].yrem) >> 8;
-            fighters[i].xrem = fighters[i].vx + fighters[i].xrem - fvx_applied * 256;
-            fighters[i].yrem = fighters[i].vy + fighters[i].yrem - fvy_applied * 256;
+            fvx_applied = (fighters[i].vx + fighters[i].xrem) >> fighter_speed_1; // >>8 for 256 scale
+            fvy_applied = (fighters[i].vy + fighters[i].yrem) >> fighter_speed_1;
+            fighters[i].xrem = fighters[i].vx + fighters[i].xrem - fvx_applied * fighter_speed_2;
+            fighters[i].yrem = fighters[i].vy + fighters[i].yrem - fvy_applied * fighter_speed_2;
             fighters[i].dx = fvx_applied; // Fighter's own movement this frame
             fighters[i].dy = fvy_applied;
 
@@ -166,8 +168,8 @@ void updateFighters()
 
                 // fighters[i].x = (random() % (MAPSIZED2 - screen_width_pixels)) + screen_width_pixels + 144;
                 // fighters[i].y = (random() % (MAPSIZED2 - screen_height_pixels)) + screen_height_pixels + 104;
-                fighters[i].x = (random() % (screen_width_pixels)) + screen_width_pixels + 144;
-                fighters[i].y = (random() % (screen_height_pixels)) + screen_height_pixels + 104;
+                fighters[i].x = (random() % (screen_width_pixels_d2)) + screen_width_pixels + 144;
+                fighters[i].y = (random() % (screen_height_pixels_d2)) + screen_height_pixels + 104;
                 if (random()%2){
                     fighters[i].x = -fighters[i].x;
                 }

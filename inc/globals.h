@@ -44,6 +44,8 @@ typedef struct {
 // Screen Dimensions (Consolidated)
 extern s16 screen_width_pixels;
 extern s16 screen_height_pixels;
+extern s16 screen_width_pixels_d2; //dimensions / 2
+extern s16 screen_height_pixels_d2;
 
 // Scroll Boundaries
 extern s16 scroll_boundary_x1; // Renamed BX1
@@ -59,6 +61,8 @@ extern s16 scroll_b_x; extern s16 scroll_b_y; // Plane B (Far)
 // Sine/Cosine Tables
 extern const s16 sin_fix[];
 extern const s16 cos_fix[];
+extern const s16 sin_fix_d2[];
+extern const s16 cos_fix_d2[];
 #define SINCOS_TABLE_STEPS (24) // Hardcode for now based on data, or calculate in game_data.c
 
 // Player Sprite
@@ -87,6 +91,13 @@ extern s16 player_thrust_momentum_x; // Renamed thrust_x
 extern s16 player_thrust_momentum_y; // Renamed thrust_y
 extern s16 player_scroll_delta_x; // Renamed dx (player's contribution to scroll)
 extern s16 player_scroll_delta_y; // Renamed dy
+extern s16 boost_factor;
+
+// Player D-control
+extern u8 dpadUp;
+extern u8 dpadDown;
+extern u8 dpadLeft;
+extern u8 dpadRight;
 
 // Bullet Pool and related
 extern Bullet bullets[NBULLET];
@@ -101,6 +112,7 @@ extern u16 new_bullet_delay_timer; // Renamed bullet_timer
 // E-Bullet Pool
 extern Bullet ebullets[NEBULLET];
 extern u16 efire_cooldown_timer; 
+extern u16 efire_cooldown_timer_min;
 extern u16 current_ebullet_index; 
 extern u16 new_ebullet_delay_timer; 
 
@@ -114,6 +126,11 @@ extern u16 new_sbullet_delay_timer;
 extern Fighter fighters[NFIGHTER_MAX];
 extern Fighter fexplode[NFIGHTER_MAX];
 extern s16 active_fighter_count; // Renamed nfighter (maybe better to count active ones)
+extern s16 fighter_speed_1;
+extern s16 fighter_speed_2;
+extern u16 game_ai_decision;      // when ships will change direction (when == game_nframe)
+// extern s16 game_ai_decision_time;
+// extern s16 game_ai_rand;
 
 // Debug Text Buffers
 extern char text_vel_x[DEBUG_TEXT_LEN];
@@ -146,6 +163,10 @@ extern u16 player_tiles;
 extern u16 coffset;
 extern u16 STRIP_TILE_8_IDX;
 extern u16 EMPTY_BAR_TILE_IDX;
+
+// Title screen
+extern s16 control_style;
+extern s16 control_style_old;
 
 
 // Ship Shield

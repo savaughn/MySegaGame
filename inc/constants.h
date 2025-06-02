@@ -12,10 +12,10 @@
 #define PARALLAX_FACTOR_BG_B    1
 #define PARALLAX_FACTOR_BG_A    1
 
-#define MAPSIZE                 2048
-#define MMAPSIZE                -2048
-#define MAPSIZED2               1024
-#define MMAPSIZED2              -1024
+#define MAPSIZE                 1024
+#define MMAPSIZE                -1024
+#define MAPSIZED2               512
+#define MMAPSIZED2              -512
 #define MAPSIZEM1               1023
 
 // --- Sine/Cosine Table ---

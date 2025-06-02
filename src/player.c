@@ -13,38 +13,105 @@ void handleInput()
 {
     u16 value = JOY_readJoypad(JOY_1);
 
-    // --- Rotation ---
-    if (player_rotation_iframe >= player_rotation_iframe_threshold){
-        player_rotation_iframe = 0;
+    if (control_style == 0){
+        // --- Rotation ---
+        if (player_rotation_iframe >= player_rotation_iframe_threshold){
+            player_rotation_iframe = 0;
 
-        if (value & BUTTON_LEFT) {
-            if (player_rotation_index == player_rotation_index_max){
-                player_rotation_index = 0;
-            } else {
-                player_rotation_index += 1;
-            }
-        } else if (value & BUTTON_RIGHT) {
-            if (player_rotation_index == 0){
-                player_rotation_index = player_rotation_index_max;
-            } else {
-                player_rotation_index -= 1;
+            if (value & BUTTON_LEFT) {
+                if (player_rotation_index == player_rotation_index_max){
+                    player_rotation_index = 0;
+                } else {
+                    player_rotation_index += 1;
+                }
+            } else if (value & BUTTON_RIGHT) {
+                if (player_rotation_index == 0){
+                    player_rotation_index = player_rotation_index_max;
+                } else {
+                    player_rotation_index -= 1;
+                }
             }
         }
-    }
-    player_rotation_iframe += 1;
+        player_rotation_iframe += 1;
 
-    // --- Thrust ---
-    player_vx = 0; // Default is no thrust applied.
-    player_vy = 0;
-    if (value & BUTTON_UP) {
-        player_vx = -sin_fix[player_rotation_index];
-        player_vy = -cos_fix[player_rotation_index];
-        player_thrust_delay_timer = 0;
-    } else if (value & BUTTON_DOWN) {
-        player_vx =  sin_fix[player_rotation_index] / 2; // should replace with lookup to avoid division
-        player_vy =  cos_fix[player_rotation_index] / 2; 
-        player_thrust_delay_timer = 0;
+        // --- Thrust ---
+        player_vx = 0; // Default is no thrust applied.
+        player_vy = 0;
+        if (value & BUTTON_UP) {
+            player_vx = -sin_fix[player_rotation_index];
+            player_vy = -cos_fix[player_rotation_index];
+            player_thrust_delay_timer = 0;
+        } else if (value & BUTTON_DOWN) {
+            player_vx =  sin_fix_d2[player_rotation_index]; // should replace with lookup to avoid division
+            player_vy =  cos_fix_d2[player_rotation_index]; 
+            player_thrust_delay_timer = 0;
+        }
+
+    } else {
+        // --- Thrust ---
+        player_vx = 0; // Default is no thrust applied.
+        player_vy = 0;
+
+        
+        dpadUp = 0 ; dpadDown = 0; dpadLeft = 0 ; dpadRight = 0;
+
+        if (value & BUTTON_UP){
+            dpadUp = 1;
+        } else if (value & BUTTON_DOWN){
+            dpadDown = 1;
+        }
+
+        if (value & BUTTON_LEFT){
+            dpadLeft = 1;
+        } else if (value & BUTTON_RIGHT){
+            dpadRight = 1;
+        }
+
+
+        if ((dpadUp) & (dpadRight)){
+            player_rotation_index = 21;
+            player_vx = -sin_fix_d2[player_rotation_index];
+            player_vy = -cos_fix_d2[player_rotation_index];
+            player_thrust_delay_timer = 0;
+        } else if ((dpadRight) & (dpadDown)){
+            player_rotation_index = 15;
+            player_vx = -sin_fix_d2[player_rotation_index];
+            player_vy = -cos_fix_d2[player_rotation_index];
+            player_thrust_delay_timer = 0;
+        } else if ((dpadDown) & (dpadLeft)){
+            player_rotation_index = 9;
+            player_vx = -sin_fix_d2[player_rotation_index];
+            player_vy = -cos_fix_d2[player_rotation_index];
+            player_thrust_delay_timer = 0;
+        } else if ((dpadLeft) & (dpadUp)){
+            player_rotation_index = 3;
+            player_vx = -sin_fix_d2[player_rotation_index];
+            player_vy = -cos_fix_d2[player_rotation_index];
+            player_thrust_delay_timer = 0;
+        } else if (dpadUp){
+            player_rotation_index = 0;
+            player_vx = -sin_fix_d2[player_rotation_index];
+            player_vy = -cos_fix_d2[player_rotation_index];
+            player_thrust_delay_timer = 0;
+        } else if (dpadRight){
+            player_rotation_index = 18;
+            player_vx = -sin_fix_d2[player_rotation_index];
+            player_vy = -cos_fix_d2[player_rotation_index];
+            player_thrust_delay_timer = 0;
+        } else if (dpadDown){
+            player_rotation_index = 12;
+            player_vx = -sin_fix_d2[player_rotation_index];
+            player_vy = -cos_fix_d2[player_rotation_index];
+            player_thrust_delay_timer = 0;
+        } else if (dpadLeft){
+            player_rotation_index = 6;
+            player_vx = -sin_fix_d2[player_rotation_index];
+            player_vy = -cos_fix_d2[player_rotation_index];
+            player_thrust_delay_timer = 0;
+        }
+
     }
+    
 
     // Fire main weapon
     if (value & BUTTON_B) {
@@ -100,8 +167,8 @@ void playerBoost(){
         // VDP_drawText("BST:", 1, 5); VDP_drawText(text_vel_x, 6, 5);
 
         if (player_boost_timer < player_boost_timer_max){
-            player_vx = -sin_fix[player_rotation_index] * 5;
-            player_vy = -cos_fix[player_rotation_index] * 5;
+            player_vx = -sin_fix[player_rotation_index] * boost_factor;
+            player_vy = -cos_fix[player_rotation_index] * boost_factor;
             player_boost_timer += 1;
         } else {
             player_boost_status = -1;

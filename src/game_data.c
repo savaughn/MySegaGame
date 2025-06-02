@@ -4,6 +4,8 @@
 // Screen Dimensions
 s16 screen_width_pixels;
 s16 screen_height_pixels;
+s16 screen_width_pixels_d2; //dimensions / 2
+s16 screen_height_pixels_d2; 
 
 // Scroll Boundaries
 s16 scroll_boundary_x1; s16 scroll_boundary_x2;
@@ -21,6 +23,16 @@ const s16 sin_fix[] = {
 const s16 cos_fix[] = {
     255, 246, 220, 180, 127,  65,   0, -65,-127,-180,-220,-246,
    -255,-246,-220,-180,-127, -65,   0,  65, 127, 180, 220, 246, 255
+};
+
+// Sine/Cosine Tables
+const s16 sin_fix_d2[] = {
+      0,  32,  63,  90, 110, 123, 127, 123, 110,  90,  63,  32,    
+      0, -32, -63, -90,-110,-123,-127,-123,-110, -90, -63, -32,   0
+};
+const s16 cos_fix_d2[] = {
+    127, 123, 110,  90,  63,  32,   0, -32, -63, -90,-110,-123,
+   -127,-123,-110, -90, -63, -32,   0,  32,  63,  90, 110, 123, 127
 };
 
 // Player Sprite
@@ -42,6 +54,13 @@ s16 player_thrust_momentum_x = 0;
 s16 player_thrust_momentum_y = 0;
 s16 player_scroll_delta_x = 0;
 s16 player_scroll_delta_y = 0;
+s16 boost_factor = 5; 
+
+// Player D-control
+u8 dpadUp;
+u8 dpadDown;
+u8 dpadLeft;
+u8 dpadRight;
 
 // Bullet Pool and related
 Bullet bullets[NBULLET];
@@ -52,6 +71,7 @@ u16 new_bullet_delay_timer = 0;
 // EBullet Pool and related
 Bullet ebullets[NEBULLET];
 u16 efire_cooldown_timer = 16;
+u16 efire_cooldown_timer_min = 4;  // 4 is the minimum.. anything less breaks game.
 u16 current_ebullet_index = 0;
 u16 new_ebullet_delay_timer = 0;
 
@@ -65,6 +85,12 @@ u16 new_sbullet_delay_timer = 0;
 Fighter fighters[NFIGHTER_MAX];
 Fighter fexplode[NFIGHTER_MAX];
 s16 active_fighter_count = NFIGHTER_MAX; // Initial number of fighters
+s16 fighter_speed_1 = 8;   //8
+s16 fighter_speed_2 = 256; //256 was default 9/512 is a bit too slow
+u16 game_ai_decision = 20000;      // when ships will change direction (when == game_nframe)
+
+// s16 game_ai_decision_time = 60; // How often to reset game_nframe
+// s16 game_ai_rand = 0;           // AI random number
 
 // Debug Text Buffers
 char text_vel_x[DEBUG_TEXT_LEN];  // defaulting to 16
@@ -95,7 +121,9 @@ u16 coffset;
 u16 STRIP_TILE_8_IDX;
 u16 EMPTY_BAR_TILE_IDX;
 
-
+// Title screen
+s16 control_style = 1;
+s16 control_style_old = 0;
 
 // Shield
 u16 new_shield_delay_timer = 0;

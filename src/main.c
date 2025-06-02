@@ -52,6 +52,8 @@ int main()
     // Get and store screen dimensions
     screen_width_pixels = VDP_getScreenWidth();
     screen_height_pixels = VDP_getScreenHeight();
+    screen_width_pixels_d2  = screen_width_pixels  / 2;
+    screen_height_pixels_d2 = screen_height_pixels / 2;
 
     // Set scroll boundaries using defines from constants.h
     scroll_boundary_x1 = BBX;

@@ -29,8 +29,25 @@ void level_up(){
 
         game_level += 1;
         efire_cooldown_timer -= 4;
-        if (efire_cooldown_timer < 4){
-            efire_cooldown_timer = 4;
+        if (efire_cooldown_timer < efire_cooldown_timer_min){
+            efire_cooldown_timer = efire_cooldown_timer_min;
+        }
+
+        if (game_level < 5){
+            // fighter_speed_1 = 8;
+            // fighter_speed_2 = 256;
+            game_ai_decision = 20000;      // when ships will change direction (when == game_nframe)
+            // game_ai_decision_time = 60;
+        } else if (game_level < 7){
+            // fighter_speed_1 = 7;
+            // fighter_speed_2 = 128;
+            game_ai_decision = 10000;      // when ships will change direction (when == game_nframe)
+            // game_ai_decision_time = 30;
+        } else {
+            // fighter_speed_1 = 6;
+            // fighter_speed_2 = 64;
+            game_ai_decision = 5000;      // when ships will change direction (when == game_nframe)
+            // game_ai_decision_time = 15;
         }
 
         player_score = 0;
@@ -131,6 +148,8 @@ void level_up(){
         player_vx_applied = 0; player_vy_applied = 0;
         player_x_remainder = 0; player_y_remainder = 0;
         player_rotation_index = 0;
+        player_thrust_momentum_x = 0;
+        player_thrust_momentum_y = 0;
 
         SPR_setVisibility(player_sprite, VISIBLE);
 
