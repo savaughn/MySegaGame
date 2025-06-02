@@ -6,6 +6,7 @@
 out/
 art/
 python_scripts/
+palette/
 
 # Temporary and system-specific files
 *.tmp
