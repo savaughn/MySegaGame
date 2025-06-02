@@ -45,6 +45,7 @@ backward or slow down.
 - **Right**: Move ship to the right.
 - **Down**: Move ship down.
 
+**Weapons and Abilities**
 - **A Button:** Short boost of speed.
 - **B Button:** Main gun (primary weapon).
 - **C Button:** Spread gun (slow fire rate, additional firepower).
