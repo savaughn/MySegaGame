@@ -50,7 +50,7 @@ backward or slow down.
 - **B Button:** Main gun (primary weapon).
 - **C Button:** Spread gun (slow fire rate, additional firepower).
 - **X Button:** Raise shield for a short duration. Weapons cannot be fired while the shield is raised.
-- **Y Button:** Place a mine that arms itself after 0.5 seconds.
+- **Y Button:** Place a mine that arms itself after a short duration.
 
 **Points:**
 - Destroying basic enemy ships grants 1 point.
