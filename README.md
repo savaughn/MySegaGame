@@ -1,5 +1,7 @@
 # Mega Super Fighter Challenge
 
+Download the latest rom: [v2025.06.01](https://github.com/jasonfrowe/MySegaGame/releases/tag/v2025.06.01)  
+
 ## Overview
 Dive into an epic space battle where you are the
 last hope against an overwhelming armada of
