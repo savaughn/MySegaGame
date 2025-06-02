@@ -11,6 +11,8 @@ high-intensity space shooter.
 Each level bring new challenges and new power-
 ups.
 
+![Title Screen](figures/Title_screen.png)
+
 Press **START** to begin the game.
 
 Use the **LEFT** and **RIGHT** buttons on the **D-Pad**
@@ -74,6 +76,8 @@ much more.
 up.
 
 ## Heads Up Display ##
+
+![Title Screen](figures/Screen_anotated.png)
 
 The game field HUD gives valuable information
 about game play and status. Player and Enemy
