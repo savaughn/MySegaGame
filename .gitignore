@@ -5,6 +5,7 @@
 # Build output directory
 out/
 art/
+python_scripts/
 
 # Temporary and system-specific files
 *.tmp
