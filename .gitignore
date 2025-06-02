@@ -4,6 +4,7 @@
 
 # Build output directory
 out/
+art/
 
 # Temporary and system-specific files
 *.tmp
